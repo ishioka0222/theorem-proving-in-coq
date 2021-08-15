@@ -451,3 +451,17 @@ Proof.
   intros t1 H1.
   case H1.
 Qed.
+
+Lemma Formula_2_15 : forall (T : Type) (A B : Ensemble T), Included T A B <-> Included T (Complement T B) (Complement T A).
+Proof.
+  intros T A B.
+  apply conj.
+  intros H1 t1 H2 H3.
+  apply H2.
+  apply H1.
+  assumption.
+  intros H1 t1 H2.
+  apply NNPP.
+  intros H3.
+  apply (H1 t1 H3 H2).
+Qed.
