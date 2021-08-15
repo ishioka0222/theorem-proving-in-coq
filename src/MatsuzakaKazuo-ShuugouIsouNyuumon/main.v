@@ -133,3 +133,19 @@ Proof.
   apply (Formula_2_7).
   apply (Formula_1_5).
 Qed.
+
+Lemma Formula_2_2'_1 : forall (T : Type) (A B : Ensemble T), Included T (Intersection T A B) A.
+Proof.
+  intros T A B t1 H1.
+  case H1.
+  intros t2 H2 H3.
+  assumption.
+Qed.
+
+Lemma Formula_2_2'_2 : forall (T : Type) (A B : Ensemble T), Included T (Intersection T A B) B.
+Proof.
+  intros T A B t1 H1.
+  case H1.
+  intros t2 H2 H3.
+  assumption.
+Qed.
