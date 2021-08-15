@@ -229,3 +229,23 @@ Proof.
   intros t3 H4 H5.
   assumption.
 Qed.
+
+Lemma Formula_2_7' : forall (T : Type) (A B : Ensemble T), Included T A B <-> (Intersection T A B) = A.
+Proof.
+  intros T A B.
+  apply conj.
+  intros H1.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t2 H2.
+  case H2.
+  intros t H3 H4.
+  assumption.
+  intros t1 H2.
+  apply Intersection_intro.
+  assumption.
+  apply (H1 t1 H2).
+  intros H1.
+  case H1.
+  apply (Formula_2_2'_2 T A B).
+Qed.
