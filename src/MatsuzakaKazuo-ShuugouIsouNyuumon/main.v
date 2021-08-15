@@ -426,3 +426,15 @@ Proof.
   intros t1 H1 H2.
   apply (H2 H1).
 Qed.
+
+Lemma Formula_2_14_1 : forall (T : Type) (A : Ensemble T), Complement T (Empty_set T) = Full_set T.
+Proof.
+  intros T A.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  apply Full_intro.
+  intros t1 H1 H2.
+  case H1.
+  contradiction.
+Qed.
