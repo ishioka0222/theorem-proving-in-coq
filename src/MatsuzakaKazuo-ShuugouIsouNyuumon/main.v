@@ -490,3 +490,34 @@ Proof.
   contradiction.
   contradiction.
 Qed.
+
+Lemma Formula_2_16' : forall (T : Type) (A B : Ensemble T), Complement T (Intersection T A B) = Union T (Complement T A) (Complement T B).
+Proof.
+  intros T A B.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  case (classic (In T A t1)).
+  intro H2.
+  right.
+  intro H3.
+  apply H1.
+  apply Intersection_intro.
+  assumption.
+  assumption.
+  intro H2.
+  apply Union_introl.
+  assumption.
+  intros t1 H1.
+  case H1.
+  intros t2 H2 H3.
+  apply H2.
+  case H3.
+  intros t3 H4 H5.
+  assumption.
+  intros t2 H2 H3.
+  apply H2.
+  case H3.
+  intros t3 H4 H5.
+  assumption.
+Qed.
