@@ -190,3 +190,42 @@ Proof.
   apply (H A B).
   apply (H B A).
 Qed.
+
+Lemma Formula_2_6' : forall (T : Type) (A B C : Ensemble T), (Intersection T (Intersection T A B) C) = (Intersection T A (Intersection T B C)).
+Proof.
+  intros T A B C.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  apply Intersection_intro.
+  case H1.
+  intros t2 H2 H3.
+  case H2.
+  intros t3 H4 H5.
+  assumption.
+  apply Intersection_intro.
+  case H1.
+  intros t2 H2 H3.
+  case H2.
+  intros t3 H4 H5.
+  assumption.
+  case H1.
+  intros t2 H2 H3.
+  assumption.
+  intros t1 H1.
+  apply Intersection_intro.
+  apply Intersection_intro.
+  case H1.
+  intros t2 H2 H3.
+  assumption.
+  case H1.
+  intros t2 H2 H3.
+  case H3.
+  intros t3 H4 H5.
+  assumption.
+  case H1.
+  intros t2 H2 H3.
+  case H3.
+  intros t3 H4 H5.
+  assumption.
+Qed.
