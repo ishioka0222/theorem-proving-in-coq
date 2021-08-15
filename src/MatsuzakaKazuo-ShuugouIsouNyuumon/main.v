@@ -1,3 +1,4 @@
+Require Import Coq.Logic.Classical_Prop.
 Require Import Coq.Sets.Ensembles.
 
 Lemma Formula_1_4 : forall (T : Type) (A B C : Ensemble T), Included T A B /\ Included T B C -> Included T A C.
@@ -381,6 +382,23 @@ Proof.
   intros t2 H2.
   assumption.
   intros t1 H1.
+  apply Union_intror.
+  assumption.
+Qed.
+
+Lemma Formula_2_12_1 : forall (T : Type) (A : Ensemble T), Union T A (Complement T A) = Full_set T.
+Proof.
+  intros T A.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  apply (Full_intro T t1).
+  intros t1 H1.
+  case (classic (In T A t1)).
+  intros H2.
+  apply Union_introl.
+  assumption.
+  intros H2.
   apply Union_intror.
   assumption.
 Qed.
