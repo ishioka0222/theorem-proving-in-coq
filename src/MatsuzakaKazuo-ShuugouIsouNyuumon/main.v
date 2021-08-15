@@ -149,3 +149,13 @@ Proof.
   intros t2 H2 H3.
   assumption.
 Qed.
+
+Lemma Formula_2_3' : forall (T : Type) (A B C : Ensemble T), Included T C A /\ Included T C B -> Included T C (Intersection T A B).
+Proof.
+  intros T A B C [H1 H2] t1 H3.
+  apply Intersection_intro.
+  apply H1.
+  assumption.
+  apply H2.
+  assumption.
+Qed.
