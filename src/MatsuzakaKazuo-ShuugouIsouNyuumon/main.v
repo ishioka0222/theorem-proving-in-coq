@@ -126,3 +126,10 @@ Proof.
   assumption.
   apply (Formula_2_2_2 T B C).
 Qed.
+
+Lemma Formula_2_9 : forall (T : Type) (A : Ensemble T), (Union T (Empty_set T) A) = A.
+Proof.
+  intros T A.
+  apply (Formula_2_7).
+  apply (Formula_1_5).
+Qed.
