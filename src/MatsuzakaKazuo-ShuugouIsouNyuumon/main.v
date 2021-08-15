@@ -414,3 +414,15 @@ Proof.
   intros t1.
   contradiction.
 Qed.
+
+Lemma Formula_2_13 : forall (T : Type) (A : Ensemble T), Complement T (Complement T A) = A.
+Proof.
+  intros T A.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  apply NNPP.
+  apply H1.
+  intros t1 H1 H2.
+  apply (H2 H1).
+Qed.
