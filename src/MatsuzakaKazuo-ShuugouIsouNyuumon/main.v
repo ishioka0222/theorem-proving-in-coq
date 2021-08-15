@@ -366,3 +366,21 @@ Proof.
   assumption.
   assumption. 
 Qed.
+
+Lemma Formula_2_11' : forall (T : Type) (A B : Ensemble T), Union T (Intersection T A B) A = A.
+Proof.
+  intros T A B.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  case H1.
+  intros t2 H2.
+  case H2.
+  intros t3 H3 H4.
+  assumption.
+  intros t2 H2.
+  assumption.
+  intros t1 H1.
+  apply Union_intror.
+  assumption.
+Qed.
