@@ -402,3 +402,15 @@ Proof.
   apply Union_intror.
   assumption.
 Qed.
+
+Lemma Formula_2_12_2 : forall (T : Type) (A : Ensemble T), Intersection T A (Complement T A) = Empty_set T.
+Proof.
+  intros T A.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  case H1.
+  contradiction.
+  intros t1.
+  contradiction.
+Qed.
