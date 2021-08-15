@@ -249,3 +249,13 @@ Proof.
   case H1.
   apply (Formula_2_2'_2 T A B).
 Qed.
+
+Lemma Formula_2_8' : forall (T : Type) (A B C : Ensemble T), Included T A B -> Included T (Intersection T A C) (Intersection T B C).
+Proof.
+  intros T A B C H1 t1 H2.
+  case H2.
+  intros t2 H3 H4.
+  apply Intersection_intro.
+  apply (H1 t2 H3).
+  assumption.
+Qed.
