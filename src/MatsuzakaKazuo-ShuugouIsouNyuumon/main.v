@@ -465,3 +465,28 @@ Proof.
   intros H3.
   apply (H1 t1 H3 H2).
 Qed.
+
+Lemma Formula_2_16 : forall (T : Type) (A B : Ensemble T), Complement T (Union T A B) = Intersection T (Complement T A) (Complement T B).
+Proof.
+  intros T A B.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  apply Intersection_intro.
+  intros H2.
+  apply H1.
+  apply Union_introl.
+  assumption.
+  intros H3.
+  apply H1.
+  apply Union_intror.
+  assumption.
+  intros t1 H1.
+  case H1.
+  intros t2 H2 H3 H4.
+  revert H2.
+  revert H3.
+  case H4.
+  contradiction.
+  contradiction.
+Qed.
