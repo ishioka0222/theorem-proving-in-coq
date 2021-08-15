@@ -171,3 +171,22 @@ Proof.
   assumption.
   assumption.
 Qed.
+
+Lemma Formula_2_5' : forall (T : Type) (A B : Ensemble T), (Intersection T A B) = (Intersection T B A).
+Proof.
+  intros T.
+  assert (forall (A B : Ensemble T), Included T (Intersection T A B) (Intersection T B A)) as H.
+  intros A B t1 H1.
+  apply Intersection_intro.
+  case H1.
+  intros t2 H2 H3.
+  assumption.
+  case H1.
+  intros t2 H2 H3.
+  assumption.
+  intros A B.
+  apply Extensionality_Ensembles.
+  apply conj.
+  apply (H A B).
+  apply (H B A).
+Qed.
