@@ -272,3 +272,40 @@ Proof.
   intros t1.
   contradiction.
 Qed.
+
+Lemma Formula_2_10 : forall (T : Type) (A B C : Ensemble T), Intersection T (Union T A B) C = Union T (Intersection T A C) (Intersection T B C).
+Proof.
+  intros T A B C.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  case H1.
+  intros t2 H2.
+  case H2.
+  intros t3 H3 H4.
+  apply Union_introl.
+  apply Intersection_intro.
+  assumption.
+  assumption.
+  intros t3 H3 H4.
+  apply Union_intror.
+  apply Intersection_intro.
+  assumption.
+  assumption.
+  intros t1 H1.
+  case H1.
+  intros t2 H2.
+  case H2.
+  intros t3 H3 H4.
+  apply Intersection_intro.
+  apply Union_introl.
+  assumption.
+  assumption.
+  intros t2 H2.
+  case H2.
+  intros t3 H3 H4.
+  apply Intersection_intro.
+  apply Union_intror.
+  assumption.
+  assumption.
+Qed.
