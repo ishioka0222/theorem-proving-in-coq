@@ -259,3 +259,16 @@ Proof.
   apply (H1 t2 H3).
   assumption.
 Qed.
+
+Lemma Formula_2_9' : forall (T : Type) (A : Ensemble T), Intersection T (Empty_set T) A = (Empty_set T).
+Proof.
+  intros T A.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  case H1.
+  intros t2 H2 H3.
+  assumption.
+  intros t1.
+  contradiction.
+Qed.
