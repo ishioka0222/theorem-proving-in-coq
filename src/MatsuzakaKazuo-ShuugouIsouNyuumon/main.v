@@ -309,3 +309,44 @@ Proof.
   assumption.
   assumption.
 Qed.
+
+Lemma Formula_2_10' : forall (T : Type) (A B C : Ensemble T), Union T (Intersection T A B) C = Intersection T (Union T A C) (Union T B C).
+Proof.
+  intros T A B C.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1 H1.
+  case H1.
+  intros t2 H2.
+  case H2.
+  intros t3 H3 H4.
+  apply Intersection_intro.
+  apply Union_introl.
+  assumption.
+  apply Union_introl.
+  assumption.
+  intros t2 H2.
+  apply Intersection_intro.
+  apply Union_intror.
+  assumption.
+  apply Union_intror.
+  assumption.
+  intros t1 H1.
+  case H1.
+  intros t2 H2.
+  case H2.
+  intros t3 H3 H4.
+  revert H3.
+  case H4.
+  intros t4 H5 H6.
+  apply Union_introl.
+  apply (Intersection_intro T A B).
+  assumption.
+  assumption.
+  intros t4 H5 H6.
+  apply Union_intror.
+  assumption.
+  intros t3 H3 H4.
+  apply Union_intror.
+  assumption.
+Qed.
