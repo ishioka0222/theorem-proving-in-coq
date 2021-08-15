@@ -159,3 +159,15 @@ Proof.
   apply H2.
   assumption.
 Qed.
+
+Lemma Formula_2_4' : forall (T : Type) (A : Ensemble T), (Intersection T A A) = A.
+Proof.
+  intros T A.
+  apply Extensionality_Ensembles.
+  apply conj.
+  apply (Formula_2_2'_1 T A A).
+  intros t1 H1.
+  apply Intersection_intro.
+  assumption.
+  assumption.
+Qed.
