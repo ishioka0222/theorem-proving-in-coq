@@ -1,5 +1,6 @@
 Require Import Coq.Logic.Classical_Prop.
 Require Import Coq.Sets.Ensembles.
+Require Import Coq.Sets.Powerset.
 
 Lemma Formula_1_4 : forall (T : Type) (A B C : Ensemble T), Included T A B /\ Included T B C -> Included T A C.
 Proof.
@@ -520,4 +521,27 @@ Proof.
   case H3.
   intros t3 H4 H5.
   assumption.
+Qed.
+
+Lemma Formula_p18_l10 : forall (T : Type), (Full_set T) = (Empty_set T) -> (Power_set T (Full_set T)) = (Singleton (Ensemble T) (Empty_set T)).
+Proof.
+  intros T H1.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1.
+  rewrite -> H1.
+  intros H2.
+  assert (t1 = Empty_set T) as H3.
+  apply Extensionality_Ensembles.
+  apply conj.
+  rewrite <- H1.
+  intros t2 H4.
+  apply Full_intro.
+  apply Empty_set_minimal.
+  rewrite -> H3.
+  apply In_singleton.
+  intros t1 H2.
+  apply Definition_of_Power_set.
+  intros t2 H3.
+  apply Full_intro.
 Qed.
