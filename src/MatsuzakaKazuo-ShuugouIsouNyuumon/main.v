@@ -545,3 +545,25 @@ Proof.
   intros t2 H3.
   apply Full_intro.
 Qed.
+
+Lemma Formula_p18_l10' : forall (T : Type), (Power_set T (Empty_set T)) = (Singleton (Ensemble T) (Empty_set T)).
+Proof.
+  intros T.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros t1.
+  apply Power_set_ind.
+  intros t2 H2.
+  assert (t2 = Empty_set T) as H3.
+  apply Extensionality_Ensembles.
+  apply conj.
+  assumption.
+  apply Empty_set_minimal.
+  rewrite -> H3.
+  apply In_singleton.
+  intros t1.
+  apply Singleton_ind.
+  apply Definition_of_Power_set.
+  intros t2.
+  contradiction.
+Qed.
