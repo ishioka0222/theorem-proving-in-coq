@@ -5,6 +5,7 @@ Require Import Coq.Sets.Powerset_facts.
 Require Import Coq.Sets.Finite_sets.
 Require Import Coq.Sets.Finite_sets_facts.
 Require Import Coq.Arith.PeanoNat.
+Require Import Coq.micromega.Lia.
 
 Lemma Formula_1_4 : forall (T : Type) (A B C : Ensemble T), Included T A B /\ Included T B C -> Included T A C.
 Proof.
@@ -698,4 +699,215 @@ Proof.
   contradiction H5.
   rewrite Nat.pred_succ.
   auto.
+Qed.
+
+Lemma setminus_disjoint : forall (T : Type) (A B : Ensemble T), Disjoint T (Setminus T A B) (Intersection T A B).
+Proof.
+  intros.
+  apply Disjoint_intro.
+  intro.
+  intro.
+  destruct H.
+  destruct H.
+  destruct H0.
+  contradiction.
+Qed.
+
+Lemma setminus_union : forall (T : Type) (A B : Ensemble T), A = Union T (Setminus T A B) (Intersection T A B).
+Proof.
+  intro.
+  intro.
+  intro.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intro.
+  intro.
+  case (classic (In T B x)).
+  intro.
+  apply Union_intror.
+  apply Intersection_intro.
+  exact H.
+  exact H0.
+  intro.
+  apply Union_introl.
+  apply Setminus_intro.
+  exact H.
+  exact H0.
+  intro.
+  intro.
+  destruct H.
+  destruct H.
+  exact H.
+  destruct H.
+  exact H.
+Qed.
+
+Lemma difference_intersection_disjoint : forall (T : Type) (A B : Ensemble T), Disjoint T (Union T (Setminus T A B) (Setminus T B A)) (Intersection T A B).
+  intro.
+  intro.
+  intro.
+  apply Disjoint_intro.
+  intro.
+  intro.
+  destruct H.
+  destruct H.
+  destruct H.
+  destruct H0.
+  contradiction.
+  destruct H.
+  destruct H0.
+  contradiction.
+Qed.
+
+Lemma difference_intersection_union : forall (T : Type) (A B : Ensemble T), (Union T A B) = Union T (Union T (Setminus T A B) (Setminus T B A)) (Intersection T A B).
+  intro.
+  intro.
+  intro.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intro.
+  intro.
+  destruct H.
+  case (classic (In T B x)).
+  intro.
+  apply Union_intror.
+  apply Intersection_intro.
+  exact H.
+  exact H0.
+  intro.
+  apply Union_introl.
+  apply Union_introl.
+  apply Setminus_intro.
+  exact H.
+  exact H0.
+  case (classic (In T A x)).
+  intro.
+  apply Union_intror.
+  apply Intersection_intro.
+  exact H0.
+  exact H.
+  intro.
+  apply Union_introl.
+  apply Union_intror.
+  apply Setminus_intro.
+  exact H.
+  exact H0.
+  intro.
+  intro.
+  destruct H.
+  destruct H.
+  destruct H.
+  apply Union_introl.
+  exact H.
+  destruct H.
+  apply Union_intror.
+  exact H.
+  destruct H.
+  apply Union_introl.
+  exact H.
+Qed.
+
+Lemma difference_disjoint : forall (T : Type) (A B : Ensemble T), Disjoint T (Setminus T A B) (Setminus T B A).
+Proof.
+  intro.
+  intro.
+  intro.
+  apply Disjoint_intro.
+  intro.
+  intro.
+  destruct H.
+  destruct H.
+  destruct H0.
+  contradiction.
+Qed.
+
+Lemma cardinal_is_strongly_additive : forall (T : Type) (cAcupB cAcapB cA cB : nat) (A B : Ensemble T), cardinal T A cA -> cardinal T B cB -> cardinal T (Intersection T A B) cAcapB -> cardinal T (Union T A B) cAcupB -> cA + cB - cAcapB = cAcupB.
+Proof.
+  intros T cAcupB cAcapB cA cB A B HcA HcB HcAcapB HcAcupB.
+  remember (Setminus T A B) as AminusB eqn: HAminusB.
+  remember (Setminus T B A) as BminusA eqn: HBminusA.
+  remember (Intersection T A B) as AcapB eqn: HAcapB.
+  assert (Finite T AminusB) as HAminusBisFinite.
+  rewrite HAminusB.
+  apply (Finite_downward_closed T A).
+  apply (cardinal_finite T A cA HcA).
+  intros x HxInAminusB.
+  destruct HxInAminusB as [HxinA HxnotinB].
+  exact HxinA.
+  assert (Finite T BminusA) as HBminusAisFinite.
+  rewrite HBminusA.
+  apply (Finite_downward_closed T B).
+  apply (cardinal_finite T B cB HcB).
+  intros x HxInBminusA.
+  destruct HxInBminusA as [HxinB HxnotinA].
+  exact HxinB.
+  apply finite_cardinal in HAminusBisFinite.
+  destruct HAminusBisFinite as [cAminusB HcAminusB].
+  apply finite_cardinal in HBminusAisFinite.
+  destruct HBminusAisFinite as [cBminusA HcBminusA].
+  pose proof (setminus_disjoint T A B) as HdisjAB.
+  pose proof (setminus_union T A B) as HunionAB.
+  pose proof (setminus_union T B A) as HunionBA.
+  assert (cAminusB + cAcapB = cA) as HeqA.
+  apply (cardinal_is_additive T cA cAminusB cAcapB AminusB AcapB).
+  rewrite HAminusB.
+  rewrite HAcapB.
+  apply setminus_disjoint.
+  exact HcAminusB.
+  exact HcAcapB.
+  rewrite HAminusB.
+  rewrite HAcapB.
+  rewrite <- HunionAB.
+  exact HcA.
+  assert (cBminusA + cAcapB = cB) as HeqB.
+  apply (cardinal_is_additive T cB cBminusA cAcapB BminusA AcapB).
+  rewrite HBminusA.
+  rewrite HAcapB.
+  rewrite Intersection_commutative.
+  apply setminus_disjoint.
+  exact HcBminusA.
+  exact HcAcapB.
+  rewrite HBminusA.
+  rewrite HAcapB.
+  rewrite Intersection_commutative.
+  rewrite <- HunionBA.
+  exact HcB.
+  assert (Finite T (Union T (Setminus T A B) (Setminus T B A))) as HdiffABisFinite.
+  apply (Finite_downward_closed T (Union T A B)).
+  apply (cardinal_finite T (Union T A B) cAcupB HcAcupB).
+  intro.
+  intro.
+  destruct H.
+  destruct H.
+  apply Union_introl.
+  exact H.
+  destruct H.
+  apply Union_intror.
+  exact H.
+  apply finite_cardinal in HdiffABisFinite.
+  destruct HdiffABisFinite as [cDiff HcDiff].
+  assert (cAminusB + cBminusA = cDiff) as HcDiffEq.
+  apply (cardinal_is_additive T cDiff cAminusB cBminusA AminusB BminusA).
+  rewrite HAminusB.
+  rewrite HBminusA.
+  apply difference_disjoint.
+  assumption.
+  assumption.
+  rewrite HAminusB.
+  rewrite HBminusA.
+  assumption.
+  assert (cDiff + cAcapB = cAcupB) as HcDiffCap.
+  apply (cardinal_is_additive T cAcupB cDiff cAcapB (Union T (Setminus T A B) (Setminus T B A)) AcapB).
+  rewrite HAcapB.
+  apply difference_intersection_disjoint.
+  assumption.
+  assumption.
+  rewrite HAcapB.
+  rewrite <- difference_intersection_union.
+  assumption.
+  rewrite <- HeqA.
+  rewrite <- HeqB.
+  rewrite <- HcDiffCap.
+  rewrite <- HcDiffEq.
+  lia.
 Qed.
