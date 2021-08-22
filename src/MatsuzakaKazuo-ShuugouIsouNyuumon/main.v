@@ -1,6 +1,10 @@
 Require Import Coq.Logic.Classical_Prop.
 Require Import Coq.Sets.Ensembles.
 Require Import Coq.Sets.Powerset.
+Require Import Coq.Sets.Powerset_facts.
+Require Import Coq.Sets.Finite_sets.
+Require Import Coq.Sets.Finite_sets_facts.
+Require Import Coq.Arith.PeanoNat.
 
 Lemma Formula_1_4 : forall (T : Type) (A B C : Ensemble T), Included T A B /\ Included T B C -> Included T A C.
 Proof.
@@ -566,4 +570,132 @@ Proof.
   apply Definition_of_Power_set.
   intros t2.
   contradiction.
+Qed.
+
+Lemma cardinal_is_additive : forall (T : Type) (cAcupB cA cB : nat) (A B : Ensemble T), Disjoint T A B -> cardinal T A cA -> cardinal T B cB -> cardinal T (Union T A B) cAcupB -> cA + cB = cAcupB.
+Proof.
+  intros T.
+  induction cAcupB.
+  intros.
+  apply cardinalO_empty in H2.
+  assert (A = Empty_set T).
+  pose proof (Union_introl T A B).
+  rewrite H2 in H3.
+  apply less_than_empty in H3.
+  exact H3.
+  assert (B = Empty_set T).
+  pose proof (Union_intror T A B).
+  rewrite H2 in H4.
+  apply less_than_empty in H4.
+  exact H4.
+  rewrite H3 in H0.
+  apply cardinal_Empty in H0.
+  rewrite H4 in H1.
+  apply cardinal_Empty in H1.
+  rewrite <- H0.
+  rewrite <- H1.
+  reflexivity.
+  intros.
+  apply cardinal_invert in H2.
+  destruct H2 as [C].
+  destruct H2 as [x].
+  destruct H2 as [H2].
+  destruct H3 as [H3].
+  assert (In T (Union T A B) x).
+  rewrite H2.
+  apply Union_intror.
+  apply In_singleton.
+  destruct H5.
+  remember (Subtract T A x) as A' eqn: H6.
+  remember (Union T A' B) as A'cupB eqn: H11.
+  assert (B = Subtract T B x).
+  symmetry.
+  apply Non_disjoint_union'.
+  intro HxinB.
+  assert (In T (Intersection T A B) x) by exact (Intersection_intro T A B x H5 HxinB).
+  rewrite (Disjoint_Intersection T A B H) in H7.
+  contradiction.
+  assert (Disjoint T A' B).
+  rewrite H6.
+  apply Disjoint_intro.
+  intros y H8.
+  destruct H8.
+  destruct H8.
+  apply Disjoint_Intersection in H.
+  assert (In T (Intersection T A B) x0) by exact (Intersection_intro T A B x0 H8 H9).
+  rewrite H in H12.
+  contradiction.
+  assert (cardinal T A' (pred cA)).
+  rewrite H6.
+  apply card_soustr_1.
+  exact H0.
+  exact H5.
+  assert (cardinal T A'cupB cAcupB).
+  rewrite H11.
+  rewrite H6.
+  rewrite H7.
+  unfold Subtract.
+  rewrite <- Setminus_Union_l.
+  rewrite <- Nat.pred_succ.
+  apply card_soustr_1.
+  rewrite H2.
+  apply card_add.
+  exact H4.
+  exact H3.
+  rewrite H2.
+  apply Add_intro2.
+  rewrite H11 in H10.
+  rewrite <- (IHcAcupB (pred cA) cB A' B H8 H9 H1 H10).
+  destruct cA.
+  apply cardinalO_empty in H0.
+  rewrite H0 in H5.
+  contradiction H5.
+  rewrite Nat.pred_succ.
+  reflexivity.
+  remember (Subtract T B x) as B' eqn: H6.
+  remember (Union T A B') as A'cupB eqn: H11.
+  assert (A = Subtract T A x).
+  symmetry.
+  apply Non_disjoint_union'.
+  intro HxinA.
+  assert (In T (Intersection T A B) x) by exact (Intersection_intro T A B x HxinA H5).
+  rewrite (Disjoint_Intersection T A B H) in H7.
+  contradiction.
+  assert (Disjoint T A B').
+  rewrite H6.
+  apply Disjoint_intro.
+  intros y H8.
+  destruct H8.
+  destruct H9.
+  apply Disjoint_Intersection in H.
+  assert (In T (Intersection T A B) x0) by exact (Intersection_intro T A B x0 H8 H9).
+  rewrite H in H12.
+  contradiction.
+  assert (cardinal T B' (pred cB)).
+  rewrite H6.
+  apply card_soustr_1.
+  exact H1.
+  exact H5.
+  assert (cardinal T A'cupB cAcupB).
+  rewrite H11.
+  rewrite H6.
+  rewrite H7.
+  unfold Subtract.
+  rewrite <- Setminus_Union_l.
+  rewrite <- Nat.pred_succ.
+  apply card_soustr_1.
+  rewrite H2.
+  apply card_add.
+  exact H4.
+  exact H3.
+  rewrite H2.
+  apply Add_intro2.
+  rewrite H11 in H10.
+  rewrite <- (IHcAcupB cA (pred cB) A B' H8 H0 H9 H10).
+  destruct cB.
+  apply cardinalO_empty in H1.
+  rewrite H1 in H5.
+  contradiction H5.
+  rewrite Nat.pred_succ.
+  auto.
 Qed.
