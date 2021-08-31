@@ -51,3 +51,9 @@ Proof.
       by [].
   + apply (Formula_2_2_1 T A A).
 Qed.
+
+Lemma Formula_2_5 (T : Type) (A B : Ensemble T) : (Union T A B) = (Union T B A).
+Proof.
+  rewrite Union_commutative.
+  by [].
+Qed.
