@@ -7,8 +7,8 @@ Lemma Formula_1_4 (T : Type) (A B C : Ensemble T) : Included T A B /\ Included T
 Proof.
   case.
   move=> HAinclB HBinclC x HxinA.
-  apply: (HBinclC x).
-  apply: (HAinclB x).
+  apply (HBinclC x).
+  apply (HAinclB x).
   by [].
 Qed.
 
@@ -35,8 +35,8 @@ Lemma Formula_2_3 (T : Type) (A B C : Ensemble T) : Included T A C /\ Included T
 Proof.
   case.
   move=> HAinclC HBinclC x [y | z].
-  + apply: HAinclC.
-  + apply: HBinclC.
+  + apply HAinclC.
+  + apply HBinclC.
 Qed.
 
 Lemma Formula_2_4 (T : Type) (A : Ensemble T) : (Union T A A) = A.
