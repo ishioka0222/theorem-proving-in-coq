@@ -101,3 +101,24 @@ Proof.
       + right.
         by [].
 Qed.
+
+Lemma Formula_2_7 (T : Type) (A B : Ensemble T) : Included T A B <-> (Union T A B) = B.
+Proof.
+  apply conj.
+  + move=> HAinclB.
+    apply Extensionality_Ensembles.
+    apply conj.
+    + move=> x.
+      case.
+      + move=> y HyinA.
+        apply HAinclB.
+        by [].
+      + move=> y HyinB.
+        by [].
+    + move=> x HxinB.
+      right.
+      by [].
+  + move=> Heq.
+    rewrite -Heq.
+    apply Formula_2_2_1.
+Qed.
