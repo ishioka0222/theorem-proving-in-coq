@@ -38,3 +38,16 @@ Proof.
   + apply: HAinclC.
   + apply: HBinclC.
 Qed.
+
+Lemma Formula_2_4 (T : Type) (A : Ensemble T) : (Union T A A) = A.
+Proof.
+  apply Extensionality_Ensembles.
+  apply conj.
+  + move=> x.
+    case.
+    + move=> y.
+      by [].
+    + move=> y.
+      by [].
+  + apply (Formula_2_2_1 T A A).
+Qed.
