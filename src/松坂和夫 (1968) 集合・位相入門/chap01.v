@@ -30,3 +30,11 @@ Proof.
   rewrite -Union_commutative.
   apply Formula_2_2_1.
 Qed.
+
+Lemma Formula_2_3 (T : Type) (A B C : Ensemble T) : Included T A C /\ Included T B C -> Included T (Union T A B) C.
+Proof.
+  case.
+  move=> HAinclC HBinclC x [y | z].
+  + apply: HAinclC.
+  + apply: HBinclC.
+Qed.
