@@ -135,3 +135,9 @@ Proof.
     right.
     by [].
 Qed.
+
+Lemma Formula_2_9 (T : Type) (A : Ensemble T) : (Union T (Empty_set T) A) = A.
+Proof.
+  apply Formula_2_7.
+  apply Formula_1_5.
+Qed.
