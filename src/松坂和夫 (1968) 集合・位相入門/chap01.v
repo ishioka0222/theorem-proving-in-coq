@@ -1,7 +1,6 @@
 From mathcomp
   Require Import ssreflect.
 Require Import Coq.Sets.Ensembles.
-Require Import Coq.Sets.Powerset_facts.
 
 Lemma Formula_1_4 (T : Type) (A B C : Ensemble T) : Included T A B /\ Included T B C -> Included T A C.
 Proof.
@@ -27,8 +26,9 @@ Qed.
 
 Lemma Formula_2_2_2 (T : Type) (A B : Ensemble T) : Included T B (Union T A B).
 Proof.
-  rewrite -Union_commutative.
-  apply Formula_2_2_1.
+  move=> x HxinB.
+  right.
+  by [].
 Qed.
 
 Lemma Formula_2_3 (T : Type) (A B C : Ensemble T) : Included T A C /\ Included T B C -> Included T (Union T A B) C.
@@ -54,6 +54,22 @@ Qed.
 
 Lemma Formula_2_5 (T : Type) (A B : Ensemble T) : (Union T A B) = (Union T B A).
 Proof.
-  rewrite Union_commutative.
-  by [].
+  apply Extensionality_Ensembles.
+  apply conj.
+  + move=> x.
+    case.
+    + move=> y HyinA.
+      right.
+      by [].
+    + move=> y HyinB.
+      left.
+      by [].
+  + move=>x.
+    case.
+    + move=> y HyinB.
+      right.
+      by [].
+    + move=> y HyinA.
+      left.
+      by [].
 Qed.
