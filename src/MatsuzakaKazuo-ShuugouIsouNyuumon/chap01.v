@@ -16,3 +16,10 @@ Proof.
   move=> x HxinEmptySet.
   by [].
 Qed.
+
+Lemma Formula_2_2_1 (T : Type) (A B : Ensemble T) : Included T A (Union T A B).
+Proof.
+  move=> x HxinA.
+  left.
+  by [].
+Qed.
