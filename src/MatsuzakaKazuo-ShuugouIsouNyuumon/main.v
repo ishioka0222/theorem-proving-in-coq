@@ -4,6 +4,7 @@ Require Import Coq.Sets.Powerset.
 Require Import Coq.Sets.Powerset_facts.
 Require Import Coq.Sets.Finite_sets.
 Require Import Coq.Sets.Finite_sets_facts.
+Require Import Coq.Sets.Image.
 Require Import Coq.Arith.PeanoNat.
 Require Import Coq.micromega.Lia.
 
@@ -371,7 +372,7 @@ Proof.
   apply Intersection_intro.
   apply Union_introl.
   assumption.
-  assumption. 
+  assumption.
 Qed.
 
 Lemma Formula_2_11' : forall (T : Type) (A B : Ensemble T), Union T (Intersection T A B) A = A.
@@ -911,3 +912,87 @@ Proof.
   rewrite <- HcDiffEq.
   lia.
 Qed.
+
+Lemma cardinality_power_set :
+  forall (T : Type) (A : Ensemble T) (n : nat),
+    cardinal T A n -> cardinal _ (Power_set _ A) (2 ^ n).
+Proof.
+  intros T A n.
+  revert A.
+  induction n.
+  intros A HA0.
+  inversion HA0.
+  rewrite Formula_p18_l10'.
+  rewrite <- Empty_set_zero'.
+  apply card_add.
+  apply card_empty.
+  intro Hcont.
+  contradiction.
+  intros A HASn.
+  apply (cardinal_invert T A (S n)) in HASn.
+  destruct HASn as [A' Htemp].
+  destruct Htemp as [a Htemp].
+  destruct Htemp as [HAeqA'a Htemp].
+  destruct Htemp as [HanotinA' HA'n].
+
+  remember (fun (X : (Ensemble T)) => Included T X A /\ ~In T X a) as PA eqn: HPA.
+  remember (fun (X : (Ensemble T)) => Included T X A /\ In T X a) as PA' eqn: HPA'.
+
+  assert (Disjoint (Ensemble T) PA PA') as HdisjPAPA'.
+  apply Disjoint_intro.
+  intros X HXinCap.
+  destruct HXinCap as [X HXinPA HXinPA'].
+  rewrite HPA in HXinPA.
+  destruct HXinPA.
+  rewrite HPA' in HXinPA'.
+  destruct HXinPA'.
+  contradiction.
+
+  assert (cardinal (Ensemble T) PA (2 ^ n)) as HPA2n.
+  assert (PA = Power_set T A') as HeqPA.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros X HXinPA.
+  rewrite HPA in HXinPA.
+  destruct HXinPA as [HXinclA HanotinX].
+  rewrite HAeqA'a in HXinclA.
+  assert (Included T X A') as HXinclA'.
+  intros x HxinX.
+  case (classic (In T A' x)).
+  auto.
+  intros HxinA'.
+  pose proof (HXinclA x HxinX) as HxinA'a.
+  destruct HxinA'a as [x HxinA'' | x HxinSinga].
+  contradiction.
+  apply Singleton_inv in HxinSinga.
+  rewrite <- HxinSinga in HxinX.
+  contradiction.
+  apply Definition_of_Power_set.
+  exact HXinclA'.
+  intros x HxinPA'.
+  destruct HxinPA' as [X HXinclA'].
+  rewrite HPA.
+  rewrite HAeqA'a.
+  apply conj.
+  intros x HxinX.
+  apply Union_introl.
+  exact (HXinclA' x HxinX).
+  intros HainX.
+  contradiction (HXinclA' a HainX).
+  rewrite HeqPA.
+  exact (IHn A' HA'n).
+
+  remember (fun (X : Ensemble T) => Add T X a) as f eqn: Hf.
+
+  assert ((Im (Ensemble T) (Ensemble T) (Full_set (Ensemble T)) f) = PA') as HImfeqPA'.
+  apply Extensionality_Ensembles.
+  apply conj.
+  intros X HX.
+  destruct HX as [X HX Y HfXeqY].
+  rewrite HfXeqY.
+  rewrite Hf.
+  rewrite HPA'.
+  apply conj.
+  intros x HainXa.
+  destruct HainXa as [x HxinX |].
+Admitted.
