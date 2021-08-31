@@ -10,3 +10,9 @@ Proof.
   apply: (HAinclB x).
   by [].
 Qed.
+
+Lemma Formula_1_5 (T : Type) (A : Ensemble T) : Included T (Empty_set T) A.
+Proof.
+  move=> x HxinEmptySet.
+  by [].
+Qed.
