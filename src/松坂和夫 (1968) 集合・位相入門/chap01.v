@@ -73,3 +73,31 @@ Proof.
       left.
       by [].
 Qed.
+
+Lemma Formula_2_6 (T : Type) (A B C : Ensemble T) : (Union T (Union T A B) C) = (Union T A (Union T B C)).
+Proof.
+  apply Extensionality_Ensembles.
+  apply conj.
+  + move=> x [ab | c].
+    + move=> [a | b].
+      + left.
+        by [].
+      + right.
+        left.
+        by [].
+    + move=> HcinC.
+      right.
+      right.
+      by [].
+  + move=> x [a | bc].
+    + move=> HainA.
+      left.
+      left.
+      by [].
+    + move=> [b | c].
+      + left.
+        right.
+        by [].
+      + right.
+        by [].
+Qed.
