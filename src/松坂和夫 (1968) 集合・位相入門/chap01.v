@@ -122,3 +122,16 @@ Proof.
     rewrite -Heq.
     apply Formula_2_2_1.
 Qed.
+
+Lemma Formula_2_8 (T : Type) (A B C : Ensemble T) : Included T A B -> Included T (Union T A C) (Union T B C).
+Proof.
+  move=> HAinclB x.
+  case.
+  + move=> y HyinA.
+    left.
+    apply HAinclB.
+    by [].
+  + move=> y HyinC.
+    right.
+    by [].
+Qed.
