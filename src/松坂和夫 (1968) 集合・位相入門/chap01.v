@@ -153,3 +153,13 @@ Proof.
   move=> x [y HyinA HyinB].
   by [].
 Qed.
+
+Lemma Formula_2_3' (T : Type) (A B C : Ensemble T) : Included T C A /\ Included T C B -> Included T C (Intersection T A B).
+Proof.
+  move=> [HCinclA HCinclB] x HxinC.
+  apply Intersection_intro.
+  + apply HCinclA.
+    by [].
+  + apply HCinclB.
+    by [].
+Qed.
