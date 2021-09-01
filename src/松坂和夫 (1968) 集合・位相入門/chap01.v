@@ -221,3 +221,13 @@ Proof.
     rewrite -Heq.
     apply (Formula_2_2'_2 T A B).
 Qed.
+
+Lemma Formula_2_8' (T : Type) (A B C : Ensemble T) : Included T A B -> Included T (Intersection T A C) (Intersection T B C).
+Proof.
+  move=> HAinclB x HxinAcapB.
+  destruct HxinAcapB as [x HxinA HxinC].
+  apply Intersection_intro.
+  + apply HAinclB.
+    by [].
+  + by [].
+Qed.
