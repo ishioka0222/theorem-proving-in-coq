@@ -202,3 +202,22 @@ Proof.
       + by [].
     + by [].
 Qed.
+
+Lemma Formula_2_7' (T : Type) (A B : Ensemble T) : Included T A B <-> (Intersection T A B) = A.
+Proof.
+  apply conj.
+  + move=> HAinclB.
+    apply Extensionality_Ensembles.
+    apply conj.
+    + move=> x HxinAcapB.
+      destruct HxinAcapB as [x HxinA HxinB].
+      by [].
+    + move=> x HxinAcapB.
+      apply Intersection_intro.
+      + by [].
+      + apply HAinclB.
+        by [].
+  + move=> Heq.
+    rewrite -Heq.
+    apply (Formula_2_2'_2 T A B).
+Qed.
