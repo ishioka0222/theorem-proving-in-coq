@@ -231,3 +231,14 @@ Proof.
     by [].
   + by [].
 Qed.
+
+Lemma Formula_2_9' (T : Type) (A : Ensemble T) : Intersection T (Empty_set T) A = (Empty_set T).
+Proof.
+  apply Extensionality_Ensembles.
+  apply conj.
+  + move=> x Hxin.
+    destruct Hxin as [x HxinEmp HxinA].
+    by [].
+  + move=> x Hxin.
+    by [].
+Qed.
