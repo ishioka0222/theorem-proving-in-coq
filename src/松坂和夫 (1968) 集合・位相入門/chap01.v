@@ -43,12 +43,10 @@ Lemma Formula_2_4 (T : Type) (A : Ensemble T) : (Union T A A) = A.
 Proof.
   apply Extensionality_Ensembles.
   apply conj.
-  + move=> x.
-    case.
-    + move=> y.
-      by [].
-    + move=> y.
-      by [].
+  + move=> x HxinAcupA.
+    destruct HxinAcupA as [x HxinA | x HxinA].
+    + by [].
+    + by [].
   + apply (Formula_2_2_1 T A A).
 Qed.
 
@@ -56,21 +54,17 @@ Lemma Formula_2_5 (T : Type) (A B : Ensemble T) : (Union T A B) = (Union T B A).
 Proof.
   apply Extensionality_Ensembles.
   apply conj.
-  + move=> x.
-    case.
-    + move=> y HyinA.
-      right.
+  + move=> x HxinAcupB.
+    destruct HxinAcupB as [x HxinA | x HxinB].
+    + right.
       by [].
-    + move=> y HyinB.
-      left.
+    + left.
       by [].
-  + move=>x.
-    case.
-    + move=> y HyinB.
-      right.
+  + move=>x HxinBcupA.
+    destruct HxinBcupA as [x HxinB | x HxinA].
+    + right.
       by [].
-    + move=> y HyinA.
-      left.
+    + left.
       by [].
 Qed.
 
@@ -108,13 +102,11 @@ Proof.
   + move=> HAinclB.
     apply Extensionality_Ensembles.
     apply conj.
-    + move=> x.
-      case.
-      + move=> y HyinA.
-        apply HAinclB.
+    + move=> x HxinAcupB.
+      destruct HxinAcupB as [x HxinA| x HxinB].
+      + apply HAinclB.
         by [].
-      + move=> y HyinB.
-        by [].
+      + by [].
     + move=> x HxinB.
       right.
       by [].
@@ -125,14 +117,12 @@ Qed.
 
 Lemma Formula_2_8 (T : Type) (A B C : Ensemble T) : Included T A B -> Included T (Union T A C) (Union T B C).
 Proof.
-  move=> HAinclB x.
-  case.
-  + move=> y HyinA.
-    left.
+  move=> HAinclB x HxinAcupC.
+  destruct HxinAcupC as [x HxinA | x HxinC].
+  + left.
     apply HAinclB.
     by [].
-  + move=> y HyinC.
-    right.
+  + right.
     by [].
 Qed.
 
@@ -179,15 +169,13 @@ Lemma Formula_2_5' (T : Type) (A B : Ensemble T) : (Intersection T A B) = (Inter
 Proof.
   apply Extensionality_Ensembles.
   apply conj.
-  + move=> x.
-    case.
-    move=> y HyinA HyinB.
+  + move=> x HxinAcapB.
+    destruct HxinAcapB as [x HinA HinB].
     apply Intersection_intro.
     + by [].
     + by [].
-  + move=> x.
-    case.
-    move=> y HyinB HyinA.
+  + move=> x HxinBcapA.
+    destruct HxinBcapA as [x HinB HinA].
     apply Intersection_intro.
     + by [].
     + by [].
