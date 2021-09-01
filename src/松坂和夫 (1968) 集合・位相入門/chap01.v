@@ -192,3 +192,25 @@ Proof.
     + by [].
     + by [].
 Qed.
+
+Lemma Formula_2_6' (T : Type) (A B C : Ensemble T) : (Intersection T (Intersection T A B) C) = (Intersection T A (Intersection T B C)).
+Proof.
+  apply Extensionality_Ensembles.
+  apply conj.
+  + move=> x HxinAcapBcapC.
+    destruct HxinAcapBcapC as [x HxinAcapB HxinC].
+    destruct HxinAcapB as [x HxinA HxinB].
+    apply Intersection_intro.
+    + by [].
+    + apply Intersection_intro.
+      + by [].
+      + by [].
+  + move=> x HxinAcapBcapC.
+    destruct HxinAcapBcapC as [x HxinA HxinBcapC].
+    destruct HxinBcapC as [x HxinB HxinC].
+    apply Intersection_intro.
+    + apply Intersection_intro.
+      + by [].
+      + by [].
+    + by [].
+Qed.
