@@ -147,3 +147,9 @@ Proof.
   move=> x [y HyinA HyinB].
   by [].
 Qed.
+
+Lemma Formula_2_2'_2 (T : Type) (A B : Ensemble T) : Included T (Intersection T A B) B.
+Proof.
+  move=> x [y HyinA HyinB].
+  by [].
+Qed.
