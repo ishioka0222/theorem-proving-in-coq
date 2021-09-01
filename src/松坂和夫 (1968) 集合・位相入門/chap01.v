@@ -163,3 +163,14 @@ Proof.
   + apply HCinclB.
     by [].
 Qed.
+
+Lemma Formula_2_4' (T : Type) (A : Ensemble T) : (Intersection T A A) = A.
+Proof.
+  apply Extensionality_Ensembles.
+  apply conj.
+  + apply (Formula_2_2'_1 T A A).
+  + move=> x HxinA.
+    apply Intersection_intro.
+    + by [].
+    + by [].
+Qed.
