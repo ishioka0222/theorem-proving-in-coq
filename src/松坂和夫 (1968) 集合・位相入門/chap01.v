@@ -141,3 +141,9 @@ Proof.
   apply Formula_2_7.
   apply Formula_1_5.
 Qed.
+
+Lemma Formula_2_2'_1 (T : Type) (A B : Ensemble T) : Included T (Intersection T A B) A.
+Proof.
+  move=> x [y HyinA HyinB].
+  by [].
+Qed.
