@@ -242,3 +242,26 @@ Proof.
   + move=> x Hxin.
     by [].
 Qed.
+
+Lemma Formula_2_10 (T : Type) (A B C : Ensemble T) : Intersection T (Union T A B) C = Union T (Intersection T A C) (Intersection T B C).
+Proof.
+  apply Extensionality_Ensembles.
+  apply conj.
+  + move=> x HxinCap.
+    destruct HxinCap as [x HxinCup HxinC].
+    destruct HxinCup as [x HxinA | HxinB].
+    + left.
+      by apply Intersection_intro.
+    + right.
+      by apply Intersection_intro.
+  + move=> x HxinCup.
+    destruct HxinCup as [x HxinAcapC | x HxinBcapC].
+    + destruct HxinAcapC as [x HxinA HxinC].
+      apply Intersection_intro.
+      + by left.
+      + by [].
+    + destruct HxinBcapC as [x HxinB HxinC].
+      apply Intersection_intro.
+      + by right.
+      + by [].
+Qed.
