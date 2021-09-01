@@ -174,3 +174,21 @@ Proof.
     + by [].
     + by [].
 Qed.
+
+Lemma Formula_2_5' (T : Type) (A B : Ensemble T) : (Intersection T A B) = (Intersection T B A).
+Proof.
+  apply Extensionality_Ensembles.
+  apply conj.
+  + move=> x.
+    case.
+    move=> y HyinA HyinB.
+    apply Intersection_intro.
+    + by [].
+    + by [].
+  + move=> x.
+    case.
+    move=> y HyinB HyinA.
+    apply Intersection_intro.
+    + by [].
+    + by [].
+Qed.
