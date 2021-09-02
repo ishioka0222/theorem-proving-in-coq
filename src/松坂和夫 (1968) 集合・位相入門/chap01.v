@@ -1,5 +1,6 @@
 From mathcomp
   Require Import ssreflect.
+Require Import Coq.Logic.Classical_Prop.
 Require Import Coq.Sets.Ensembles.
 
 Lemma Formula_1_4 (T : Type) (A B C : Ensemble T) : Included T A B /\ Included T B C -> Included T A C.
@@ -309,4 +310,13 @@ Proof.
     + by [].
   + move=> x HxinA.
     by right.
+Qed.
+
+Lemma Formula_2_12_1 (T : Type) (A : Ensemble T) : Union T A (Complement T A) = Full_set T.
+Proof.
+  apply Extensionality_Ensembles.
+  split.
+  + by [].
+  + move=> x _.
+    by case: (classic (In T A x)); [left | right].
 Qed.
