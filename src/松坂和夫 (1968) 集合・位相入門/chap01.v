@@ -320,3 +320,13 @@ Proof.
   + move=> x _.
     by case: (classic (In T A x)); [left | right].
 Qed.
+
+Lemma Formula_2_12_2 (T : Type) (A : Ensemble T) : Intersection T A (Complement T A) = Empty_set T.
+Proof.
+  apply Extensionality_Ensembles.
+  split.
+  + move=> x HxinAcapAc.
+    destruct HxinAcapAc as [x HxinA HxinAc].
+    by [].
+  + by [].
+Qed.
