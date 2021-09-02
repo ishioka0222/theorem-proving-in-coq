@@ -398,3 +398,21 @@ Proof.
     + apply HxinBc.
       by [].
 Qed.
+
+Lemma Formula_2_16' (T : Type) (A B : Ensemble T) : Complement T (Intersection T A B) = Union T (Complement T A) (Complement T B).
+Proof.
+  apply Extensionality_Ensembles.
+  split.
+  + move=> x HxinAcapBc.
+    case (classic (In T A x)).
+    + move=> HxinA.
+      right.
+      move=> HxinB.
+      apply HxinAcapBc.
+      by split.
+    + move=> HxnotinA.
+      by left.
+  + move=> x HxinAccupBc HxinAcapB.
+    destruct HxinAcapB as [x HxinA HxinB].
+    by destruct HxinAccupBc as [x HxinAc | x HxinBc].
+Qed.
