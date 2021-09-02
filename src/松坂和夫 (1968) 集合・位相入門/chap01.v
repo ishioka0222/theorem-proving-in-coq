@@ -2,6 +2,7 @@ From mathcomp
   Require Import ssreflect.
 Require Import Coq.Logic.Classical_Prop.
 Require Import Coq.Sets.Ensembles.
+Require Import Coq.Sets.Powerset.
 
 Lemma Formula_1_4 (T : Type) (A B C : Ensemble T) : Included T A B /\ Included T B C -> Included T A C.
 Proof.
@@ -415,4 +416,25 @@ Proof.
   + move=> x HxinAccupBc HxinAcapB.
     destruct HxinAcapB as [x HxinA HxinB].
     by destruct HxinAccupBc as [x HxinAc | x HxinBc].
+Qed.
+
+Lemma Formula_p18_l10 (T : Type) : (Full_set T) = (Empty_set T) -> (Power_set T (Full_set T)) = (Singleton (Ensemble T) (Empty_set T)).
+Proof.
+  move=> HFullEqEmpty.
+  apply Extensionality_Ensembles.
+  apply conj.
+  + move=> X HXinPFull.
+    have: (X = Empty_set T).
+    + apply Extensionality_Ensembles.
+      split.
+      + rewrite -HFullEqEmpty.
+        by [].
+      + by [].
+    + move=> HXeqEmpty.
+      rewrite HXeqEmpty.
+      by [].
+  + move=> X HX.
+    apply Definition_of_Power_set.
+    move=> x HxinX.
+    apply Full_intro.
 Qed.
