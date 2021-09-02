@@ -285,3 +285,16 @@ Proof.
       + by right.
       + by right.
 Qed.
+
+Lemma Formula_2_11 (T : Type) (A B : Ensemble T) : Intersection T (Union T A B) A = A.
+Proof.
+  apply Extensionality_Ensembles.
+  split.
+  + move=> x HxinAcupB.
+    destruct HxinAcupB as [x HxinAcupB HxinA].
+    by [].
+  + move=> x HxinA.
+    split.
+    + by left.
+    + by [].
+Qed.
