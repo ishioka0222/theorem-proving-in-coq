@@ -298,3 +298,15 @@ Proof.
     + by left.
     + by [].
 Qed.
+
+Lemma Formula_2_11' (T : Type) (A B : Ensemble T) : Union T (Intersection T A B) A = A.
+Proof.
+  apply Extensionality_Ensembles.
+  split.
+  + move=> x HxinCup.
+    destruct HxinCup as [x HxinAcapB | x HxinA].
+    + by destruct HxinAcapB as [x HxinA HxinB].
+    + by [].
+  + move=> x HxinA.
+    by right.
+Qed.
