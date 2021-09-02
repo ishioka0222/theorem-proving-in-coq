@@ -330,3 +330,14 @@ Proof.
     by [].
   + by [].
 Qed.
+
+Lemma Formula_2_13 (T : Type) (A : Ensemble T) : Complement T (Complement T A) = A.
+Proof.
+  apply Extensionality_Ensembles.
+  split.
+  + move=> x HxinAcc.
+    apply NNPP.
+    by [].
+  + move=> x HxinA HxinAc.
+    apply (HxinAc HxinA).
+Qed.
