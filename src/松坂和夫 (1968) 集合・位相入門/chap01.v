@@ -351,3 +351,13 @@ Proof.
   + move=> x H1 H2.
     by [].
 Qed.
+
+Lemma Formula_2_14_2 (T : Type) : Complement T (Full_set T) = Empty_set T.
+Proof.
+  apply Extensionality_Ensembles.
+  split.
+  + move=> x H.
+    by case H.
+  + move=> x H.
+    by [].
+Qed.
