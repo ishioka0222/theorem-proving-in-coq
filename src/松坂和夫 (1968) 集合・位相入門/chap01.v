@@ -341,3 +341,13 @@ Proof.
   + move=> x HxinA HxinAc.
     apply (HxinAc HxinA).
 Qed.
+
+Lemma Formula_2_14_1 (T : Type) : Complement T (Empty_set T) = Full_set T.
+Proof.
+  apply Extensionality_Ensembles.
+  split.
+  + move=> x Hx.
+    by [].
+  + move=> x H1 H2.
+    by [].
+Qed.
