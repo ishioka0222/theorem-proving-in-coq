@@ -361,3 +361,17 @@ Proof.
   + move=> x H.
     by [].
 Qed.
+
+Lemma Formula_2_15 (T : Type) (A B : Ensemble T) : Included T A B <-> Included T (Complement T B) (Complement T A).
+Proof.
+  split.
+  + move=> HAinclB x HxinBc HxinA.
+    apply HxinBc.
+    apply HAinclB.
+    by [].
+  + move=> HBcinclAc x HxinA.
+    apply NNPP.
+    move=> HxnotinB.
+    apply (HBcinclAc x HxnotinB).
+    by [].
+Qed.
