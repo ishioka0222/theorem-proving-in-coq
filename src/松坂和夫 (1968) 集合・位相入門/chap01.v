@@ -438,3 +438,24 @@ Proof.
     move=> x HxinX.
     apply Full_intro.
 Qed.
+
+Lemma Formula_p18_l10' (T : Type) : (Power_set T (Empty_set T)) = (Singleton (Ensemble T) (Empty_set T)).
+Proof.
+  apply Extensionality_Ensembles.
+  split.
+  + move=> X HXinPEmpty.
+    destruct HXinPEmpty as [X HXinclEmpty].
+    have: (X = Empty_set T).
+    + apply Extensionality_Ensembles.
+      split.
+      + by [].
+      + apply Empty_set_minimal.
+    + move=> HXEqEmpty.
+      rewrite HXEqEmpty.
+      apply In_singleton.
+  + move=> X.
+    apply Singleton_ind.
+    apply Definition_of_Power_set.
+    move=> x.
+    by [].
+Qed.
