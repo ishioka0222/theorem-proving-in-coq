@@ -52,3 +52,52 @@ Lemma sys_eqS (A B : mySet Mother) : A = B -> B = A.
 Proof. move=> H. by rewrite H. Qed.
 
 End 等号.
+
+Definition myComplement {M : Type} (A : mySet M) : mySet M :=
+  fun (x : M) => ~(A x).
+Notation "A ^c" := (myComplement A) (at level 11).
+
+Definition myCup {M : Type} (A B : mySet M) : mySet M :=
+  fun (x : M) => (x ∊ A) \/ (x ∊ B).
+Notation "A ∪ B" := (myCup A B) (at level 11).
+
+Section 演算.
+Variable M : Type.
+
+Lemma cEmpty_Mother : (@myEmptySet M)^c = myMotherSet.
+Proof.
+apply: axiom_ExteqmySet; rewrite /eqmySet.
+by apply: conj; rewrite /mySub /myComplement // => x Hfull.
+Qed.
+
+Lemma cc_cancel (A : mySet M) : (A^c)^c = A.
+apply: axiom_ExteqmySet; rewrite /eqmySet.
+apply: conj; rewrite /mySub /myComplement => x H //.
+by case: (axiom_mySet A x).
+Qed.
+
+Lemma cMother_Empty : (@myMotherSet M)^c = myEmptySet.
+Proof. by rewrite -cEmpty_Mother cc_cancel. Qed.
+
+Lemma myCupA (A B C : mySet M) : (A ∪ B) ∪ C = A ∪ (B ∪ C).
+Proof.
+apply: axiom_ExteqmySet.
+rewrite /eqmySet /mySub.
+apply: conj => x [H1 | H2].
+- case: H1 => t.
+  + by apply: or_introl.
+  + by apply: or_intror; apply: or_introl.
+- by apply: or_intror; apply: or_intror.
+- by apply: or_introl; apply: or_introl.
+- case: H2 => t.
+  + by apply: or_introl; apply: or_intror.
+  + by apply: or_intror.
+Qed.
+
+Lemma myUnionCompMother (A : mySet M) : A ∪ (A^c) = myMotherSet.
+Proof.
+apply: axiom_ExteqmySet; rewrite /eqmySet /mySub; apply: conj => [x | x HM].
+- by case.
+- by case: (axiom_mySet A x); [apply: or_introl | apply: or_intror].
+Qed.
+End 演算.
