@@ -16,19 +16,19 @@ Structure Group (T : Type) : Type := mkGroup
 }.
 
 (* Definition 1.3. *)
-Definition is_identity (T : Type) (G : Group T) (e : T) :=
+Definition is_one (T : Type) (G : Group T) (e : T) :=
   forall g : T, mul T G g e = g /\ mul T G e g = g.
 
 (* Theorem 1.2.(ii)' *)
 Theorem one_exists_unique (T : Type) (G : Group T) :
-  exists! one : T, is_identity T G one.
+  exists! one : T, is_one T G one.
 Proof.
   destruct (non_emp T G) as [a HaInG].
   destruct (inv_mul T G a a) as [e HaeEqa].
   destruct (mul_inv T G a a) as [e' He'aEqa].
   exists e.
-  
-  assert (forall g : T, mul T G g e = g) as He_r_id.
+
+  assert (forall g : T, mul T G g e = g) as He_oner.
   + move=> g.
     destruct (inv_mul T G a g) as [u HauEqg].
     destruct (mul_inv T G a g) as [v HvaEqg].
@@ -37,7 +37,7 @@ Proof.
     rewrite HaeEqa.
     by [].
 
-  assert (forall g : T, mul T G e' g = g) as He'_l_id.
+  assert (forall g : T, mul T G e' g = g) as He'_onel.
   + move=> g.
     destruct (inv_mul T G a g) as [u HauEqg].
     destruct (mul_inv T G a g) as [v HvaEqg].
@@ -47,20 +47,20 @@ Proof.
     by [].
 
   assert (e = e') as HeEqe'.
-  + rewrite -(He_r_id e').
-    rewrite (He'_l_id e).
+  + rewrite -(He_oner e').
+    rewrite (He'_onel e).
     by [].
 
   split.
   + move=> g.
     split.
-    + apply (He_r_id g).
+    + apply (He_oner g).
     + rewrite HeEqe'.
-      rewrite (He'_l_id g).
+      rewrite (He'_onel g).
       by [].
-  + move=> g Hg_id.
-    destruct (Hg_id e) as [HegEqe HgeEqe].
-    rewrite -(He_r_id g).
+  + move=> g Hg_one.
+    destruct (Hg_one e) as [HegEqe HgeEqe].
+    rewrite -(He_oner g).
     rewrite HgeEqe.
     by [].
 Qed.
