@@ -126,3 +126,68 @@ Proof.
   rewrite H.
   exact Ha''.
 Qed.
+
+(* TODO: Theorem 1.2.(iii) *)
+
+(* Corollary_p4_l7 *)
+Structure Group' : Type := mkGroup'
+{
+  G' :> Set;
+  one' : G';
+  inv' : G' -> G';
+  mul' : G' -> G' -> G';
+  mul_assoc' : forall a b c : G', mul' (mul' a b) c = mul' a (mul' b c);
+  one_mul' : forall a : G', mul' one' a = a;
+  mul_one' : forall a : G', mul' a one' = a;
+  inv_mul' : forall a : G', mul' (inv' a) a = one';
+  mul_inv' : forall a : G', mul' a (inv' a) = one';
+}.
+
+Definition group_is_group' : Group -> Group'.
+  move=> G.
+  exact (mkGroup'
+    G
+    (one G)
+    (inv G)
+    (mul G)
+    (mul_assoc G)
+    (fun a => proj2 (one_is_one G a))
+    (fun a => proj1 (one_is_one G a))
+    (fun a => proj2 (inv_is_inv G a))
+    (fun a => proj1 (inv_is_inv G a))
+   ).
+Qed.
+
+Theorem group'_is_group_sub_r (G' : Group') :
+  forall a b : G', exists x : G', mul' G' a x = b.
+Proof.
+  move=> a b.
+  exists (mul' G' (inv' G' a) b).
+  rewrite -mul_assoc'.
+  rewrite mul_inv'.
+  rewrite one_mul'.
+  reflexivity.
+Qed.
+
+Theorem group'_is_group_sub_l (G' : Group') :
+  forall a b : G', exists y : G', mul' G' y a = b.
+Proof.
+  move=> a b.
+  exists (mul' G' b (inv' G' a)).
+  rewrite mul_assoc'.
+  rewrite inv_mul'.
+  rewrite mul_one'.
+  reflexivity.
+Qed.
+
+Definition group'_is_group : Group' -> Group.
+  move=> G'.
+  exact (mkGroup
+    G'
+    (inhabits (one' G'))
+    (mul' G')
+    (mul_assoc' G')
+    (group'_is_group_sub_r G')
+    (group'_is_group_sub_l G')
+  ).
+Qed.
