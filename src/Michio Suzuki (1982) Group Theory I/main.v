@@ -4,7 +4,7 @@ From mathcomp
 Require Import Coq.Logic.Description.
 
 (* Definition 1.1. *)
-Structure Group : Type := mkGroup
+Structure group : Type := make_group
 {
   G :> Set;
   inhab : inhabited G;
@@ -15,11 +15,11 @@ Structure Group : Type := mkGroup
 }.
 
 (* Definition 1.3. *)
-Definition is_one (G : Group) (e : G) :=
+Definition is_one (G : group) (e : G) :=
   forall g : G, mul G g e = g /\ mul G e g = g.
 
 (* Theorem 1.2.(ii)' *)
-Theorem one_exists_unique (G : Group) :
+Theorem one_exists_unique (G : group) :
   exists! one : G, is_one G one.
 Proof.
   destruct (inhab G) as [a].
@@ -64,12 +64,12 @@ Proof.
     by [].
 Qed.
 
-Definition one (G : Group) : G.
+Definition one (G : group) : G.
   destruct (constructive_definite_description (is_one G) (one_exists_unique G)) as [one H].
   exact one.
 Defined.
 
-Theorem one_is_one (G : Group) : is_one G (one G).
+Theorem one_is_one (G : group) : is_one G (one G).
 Proof.
   remember (one G) as e eqn: H.
   unfold one in H.
@@ -78,11 +78,11 @@ Proof.
   exact He'.
 Qed.
 
-Definition are_mutually_inverse (G : Group) (a a' : G) :=
+Definition are_mutually_inverse (G : group) (a a' : G) :=
   mul G a a' = one G /\ mul G a' a = one G.
 
 (* Theorem 1.2.(ii)'' *)
-Theorem inverse_exists_unique (G : Group) (a : G) :
+Theorem inverse_exists_unique (G : group) (a : G) :
   exists! a' : G, are_mutually_inverse G a a'.
 Proof.
   destruct (eq_l G a (one G)) as [a' Haa'_eq_one].
@@ -112,13 +112,13 @@ Proof.
     by [].
 Qed.
 
-Definition inv (G : Group) : G -> G.
+Definition inv (G : group) : G -> G.
   move=> a.
   destruct (constructive_definite_description (are_mutually_inverse G a) (inverse_exists_unique G a)) as [a' H].
   exact a'.
 Defined.
 
-Theorem inv_is_inv (G : Group) (a : G) : are_mutually_inverse G a (inv G a).
+Theorem inv_is_inv (G : group) (a : G) : are_mutually_inverse G a (inv G a).
 Proof.
   remember (inv G a) as a' eqn: H.
   unfold inv in H.
@@ -128,7 +128,7 @@ Proof.
 Qed.
 
 (* Theorem 1.2.(iii).1 *)
-Theorem eq_l_ex_uni (G : Group) :
+Theorem eq_l_ex_uni (G : group) :
   forall a b x : G, mul G a x = b -> x = mul G (inv G a) b.
 Proof.
   move=> a b x Hax_eq_b.
@@ -140,7 +140,7 @@ Proof.
 Qed.
 
 (* Theorem 1.2.(iii).2 *)
-Theorem eq_r_ex_uni (G : Group) :
+Theorem eq_r_ex_uni (G : group) :
   forall a b y : G, mul G y a = b -> y = mul G b (inv G a).
 Proof.
   move=> a b y Hya_eq_b.
@@ -152,7 +152,7 @@ Proof.
 Qed.
 
 (* Corollary_p4_l7 *)
-Structure Group' : Type := mkGroup'
+Structure group' : Type := make_group'
 {
   G' :> Set;
   one' : G';
@@ -165,9 +165,9 @@ Structure Group' : Type := mkGroup'
   mul_inv' : forall a : G', mul' a (inv' a) = one';
 }.
 
-Definition group_is_group' : Group -> Group'.
+Definition group_to_group' : group -> group'.
   move=> G.
-  exact (mkGroup'
+  exact (make_group'
     G
     (one G)
     (inv G)
@@ -180,7 +180,7 @@ Definition group_is_group' : Group -> Group'.
    ).
 Qed.
 
-Theorem group'_is_group_sub_r (G' : Group') :
+Theorem group'_to_group_sub_r (G' : group') :
   forall a b : G', exists x : G', mul' G' a x = b.
 Proof.
   move=> a b.
@@ -191,7 +191,7 @@ Proof.
   reflexivity.
 Qed.
 
-Theorem group'_is_group_sub_l (G' : Group') :
+Theorem group'_to_group_sub_l (G' : group') :
   forall a b : G', exists y : G', mul' G' y a = b.
 Proof.
   move=> a b.
@@ -202,20 +202,20 @@ Proof.
   reflexivity.
 Qed.
 
-Definition group'_is_group : Group' -> Group.
+Definition group'_to_group : group' -> group.
   move=> G'.
-  exact (mkGroup
+  exact (make_group
     G'
     (inhabits (one' G'))
     (mul' G')
     (mul_assoc' G')
-    (group'_is_group_sub_r G')
-    (group'_is_group_sub_l G')
+    (group'_to_group_sub_r G')
+    (group'_to_group_sub_l G')
   ).
 Qed.
 
 (* Theorem 1.4.1 *)
-Theorem inv_inv (G : Group) :
+Theorem inv_inv (G : group) :
   forall a : G, inv G (inv G a) = a.
 Proof.
   move=> a.
@@ -236,7 +236,7 @@ Proof.
 Qed.
 
 (* Theorem 1.4.2 *)
-Theorem mul_inv_rev (G : Group) :
+Theorem mul_inv_rev (G : group) :
   forall a b : G, inv G (mul G a b) = mul G (inv G b) (inv G a).
 Proof.
   move=> a b.
@@ -246,7 +246,7 @@ Proof.
   destruct H as [_ Huni].
 
   pose proof (inv_is_inv G (mul G a b)) as H1.
-  
+
   assert (are_mutually_inverse G (mul G a b) (mul G (inv G b) (inv G a))) as H2.
   + split.
     + rewrite (mul_assoc G a b (mul G (inv G b) (inv G a))).
