@@ -10,8 +10,8 @@ Structure Group : Type := mkGroup
   inhab : inhabited G;
   mul : G -> G -> G;
   mul_assoc : forall a b c : G, mul (mul a b) c = mul a (mul b c);
-  inv_mul : forall a b : G, exists x : G, mul a x = b;
-  mul_inv : forall a b : G, exists y : G, mul y a = b;
+  eq_l : forall a b : G, exists x : G, mul a x = b;
+  eq_r : forall a b : G, exists y : G, mul y a = b;
 }.
 
 (* Definition 1.3. *)
@@ -23,14 +23,14 @@ Theorem one_exists_unique (G : Group) :
   exists! one : G, is_one G one.
 Proof.
   destruct (inhab G) as [a].
-  destruct (inv_mul G a a) as [e HaeEqa].
-  destruct (mul_inv G a a) as [e' He'aEqa].
+  destruct (eq_l G a a) as [e HaeEqa].
+  destruct (eq_r G a a) as [e' He'aEqa].
   exists e.
 
   assert (forall g : G, mul G g e = g) as He_oner.
   + move=> g.
-    destruct (inv_mul G a g) as [u HauEqg].
-    destruct (mul_inv G a g) as [v HvaEqg].
+    destruct (eq_l G a g) as [u HauEqg].
+    destruct (eq_r G a g) as [v HvaEqg].
     rewrite -HvaEqg.
     rewrite mul_assoc.
     rewrite HaeEqa.
@@ -38,8 +38,8 @@ Proof.
 
   assert (forall g : G, mul G e' g = g) as He'_onel.
   + move=> g.
-    destruct (inv_mul G a g) as [u HauEqg].
-    destruct (mul_inv G a g) as [v HvaEqg].
+    destruct (eq_l G a g) as [u HauEqg].
+    destruct (eq_r G a g) as [v HvaEqg].
     rewrite -HauEqg.
     rewrite -mul_assoc.
     rewrite He'aEqa.
@@ -85,8 +85,8 @@ Definition are_mutually_inverse (G : Group) (a a' : G) :=
 Theorem inverse_exists_unique (G : Group) (a : G) :
   exists! a' : G, are_mutually_inverse G a a'.
 Proof.
-  destruct (inv_mul G a (one G)) as [a' Haa'_eq_one].
-  destruct (mul_inv G a (one G)) as [a'' Ha''a_eq_one].
+  destruct (eq_l G a (one G)) as [a' Haa'_eq_one].
+  destruct (eq_r G a (one G)) as [a'' Ha''a_eq_one].
 
   assert (a' = a'') as Ha'_eq_a''.
   + rewrite -(proj1 ((one_is_one G) a'')).
