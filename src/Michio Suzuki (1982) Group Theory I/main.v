@@ -87,7 +87,7 @@ Theorem inverse_exists_unique (G : Group) (a : G) :
 Proof.
   destruct (inv_mul G a (one G)) as [a' Haa'_eq_one].
   destruct (mul_inv G a (one G)) as [a'' Ha''a_eq_one].
-  
+
   assert (a' = a'') as Ha'_eq_a''.
   + rewrite -(proj1 ((one_is_one G) a'')).
     rewrite -Haa'_eq_one.
@@ -95,10 +95,10 @@ Proof.
     rewrite Ha''a_eq_one.
     rewrite (proj2 ((one_is_one G) a')).
     by [].
-  
+
   rewrite -Ha'_eq_a'' in Ha''a_eq_one.
   exists a'.
-  
+
   split.
   + split.
     + exact Haa'_eq_one.
