@@ -127,7 +127,29 @@ Proof.
   exact Ha''.
 Qed.
 
-(* TODO: Theorem 1.2.(iii) *)
+(* Theorem 1.2.(iii).1 *)
+Theorem eq_l_ex_uni (G : Group) :
+  forall a b x : G, mul G a x = b -> x = mul G (inv G a) b.
+Proof.
+  move=> a b x Hax_eq_b.
+  rewrite -Hax_eq_b.
+  rewrite -mul_assoc.
+  rewrite (proj2 (inv_is_inv G a)).
+  rewrite (proj2 (one_is_one G x)).
+  reflexivity.
+Qed.
+
+(* Theorem 1.2.(iii).2 *)
+Theorem eq_r_ex_uni (G : Group) :
+  forall a b y : G, mul G y a = b -> y = mul G b (inv G a).
+Proof.
+  move=> a b y Hya_eq_b.
+  rewrite -Hya_eq_b.
+  rewrite mul_assoc.
+  rewrite (proj1 (inv_is_inv G a)).
+  rewrite (proj1 (one_is_one G y)).
+  reflexivity.
+Qed.
 
 (* Corollary_p4_l7 *)
 Structure Group' : Type := mkGroup'
@@ -190,4 +212,54 @@ Definition group'_is_group : Group' -> Group.
     (group'_is_group_sub_r G')
     (group'_is_group_sub_l G')
   ).
+Qed.
+
+(* Theorem 1.4.1 *)
+Theorem inv_inv (G : Group) :
+  forall a : G, inv G (inv G a) = a.
+Proof.
+  move=> a.
+
+  pose proof (inverse_exists_unique G (inv G a)) as H.
+  rewrite <- unique_existence in H.
+  destruct H as [_ Huni].
+
+  pose proof (inv_is_inv G (inv G a)) as Hinvinva.
+
+  pose proof (inv_is_inv G a) as Ha.
+  unfold are_mutually_inverse in Ha.
+  rewrite <- and_comm in Ha.
+  fold (are_mutually_inverse G (inv G a) a) in Ha.
+
+  rewrite -(Huni a (inv G (inv G a)) Ha Hinvinva).
+  reflexivity.
+Qed.
+
+(* Theorem 1.4.2 *)
+Theorem mul_inv_rev (G : Group) :
+  forall a b : G, inv G (mul G a b) = mul G (inv G b) (inv G a).
+Proof.
+  move=> a b.
+
+  pose proof (inverse_exists_unique G (mul G a b)) as H.
+  rewrite <- unique_existence in H.
+  destruct H as [_ Huni].
+
+  pose proof (inv_is_inv G (mul G a b)) as H1.
+  
+  assert (are_mutually_inverse G (mul G a b) (mul G (inv G b) (inv G a))) as H2.
+  + split.
+    + rewrite (mul_assoc G a b (mul G (inv G b) (inv G a))).
+      rewrite -(mul_assoc G b (inv G b) (inv G a)).
+      rewrite (proj1 (inv_is_inv G b)).
+      rewrite (proj2 (one_is_one G (inv G a))).
+      rewrite (proj1 (inv_is_inv G a)).
+      reflexivity.
+    + rewrite (mul_assoc G (inv G b) (inv G a) (mul G a b)).
+      rewrite -(mul_assoc G (inv G a) a b).
+      rewrite (proj2 (inv_is_inv G a)).
+      rewrite (proj2 (one_is_one G b)).
+      rewrite (proj2 (inv_is_inv G b)).
+      reflexivity.
+  exact (Huni (inv G (mul G a b)) (mul G (inv G b) (inv G a)) H1 H2).
 Qed.
