@@ -2,6 +2,8 @@
 From mathcomp
   Require Import ssreflect.
 Require Import Coq.Logic.Description.
+Require Import Coq.Logic.FinFun.
+Require Import Coq.Logic.Classical_Prop.
 
 (* Definition 1.1. *)
 Structure group : Type := make_group
@@ -263,3 +265,93 @@ Proof.
       reflexivity.
   exact (Huni (group_inv G (group_mul G a b)) (group_mul G (group_inv G b) (group_inv G a)) H1 H2).
 Qed.
+
+(* Definition 2.1 *)
+Definition subset (S : Set) := S -> Prop.
+
+Structure subgroup (G : group) : Type := make_subgroup
+{
+  subgroup_carrier :> subset G;
+  subgroup_inhab : inhabited (sig subgroup_carrier);
+  subgroup_mul_mem : forall a b : G, subgroup_carrier a -> subgroup_carrier b -> subgroup_carrier (group_mul G a b);
+  subgroup_inv_mem : forall a : G, subgroup_carrier a -> subgroup_carrier (group_inv G a);
+}.
+
+(* 2.2.(a) *)
+Theorem subgroup_one_mem (G : group) (H : subgroup G) :
+  subgroup_carrier G H (group_one G).
+Proof.
+  destruct (subgroup_inhab G H) as [Hinhab].
+  destruct Hinhab as [a Ha_in_H].
+  
+  pose proof (subgroup_inv_mem G H a Ha_in_H) as Hainv_in_H.
+  pose proof (subgroup_mul_mem G H a (group_inv G a) Ha_in_H Hainv_in_H) as Hmul_in_H.
+  rewrite (proj1 (group_inv_is_group_inv G a)) in Hmul_in_H.
+  exact Hmul_in_H.
+Qed.
+
+Definition subgroup_incl (G : group) (H : subgroup G) :
+  (sig (subgroup_carrier G H)) -> G.
+Proof.
+  move=> [a Ha].
+  exact a.
+Defined.
+
+Theorem subgroup_incl_is_injective (G : group) (H : subgroup G) :
+  Injective (subgroup_incl G H).
+Proof.
+  move=> [x Hx] [y Hy] Heq.
+  unfold subgroup_incl in Heq.
+  move: Hx Hy.
+  rewrite -Heq.
+  move=> Hx Hy.
+  apply f_equal.
+  apply proof_irrelevance.
+Qed.
+
+Definition subgroup_mul (G : group) (H : subgroup G) :
+  (sig (subgroup_carrier G H)) -> (sig (subgroup_carrier G H)) -> (sig (subgroup_carrier G H)).
+Proof.
+  move=> [a Ha] [b Hb].
+  exists (group_mul G a b).
+  exact (subgroup_mul_mem G H a b Ha Hb).
+Defined.
+
+Theorem subgroup_mul_assoc (G : group) (H : subgroup G) :
+  forall a b c : (sig (subgroup_carrier G H)),
+    subgroup_mul G H (subgroup_mul G H a b) c =
+      subgroup_mul G H a (subgroup_mul G H b c).
+Proof.
+  (* TODO *)
+Admitted.
+
+Theorem subgroup_group_eq_l (G : group) (H : subgroup G) :
+  forall a b : (sig (subgroup_carrier G H)),
+  exists x : (sig (subgroup_carrier G H)),
+  subgroup_mul G H a x = b.
+Proof.
+  (* TODO *)
+Admitted.
+
+Theorem subgroup_group_eq_r (G : group) (H : subgroup G) :
+  forall a b : (sig (subgroup_carrier G H)),
+  exists y : (sig (subgroup_carrier G H)),
+  subgroup_mul G H y a = b.
+Proof.
+  (* TODO *)
+Admitted.
+
+(* 2.2.(b) *)
+Theorem subgroup_is_group (G : group) :
+  (subgroup G) -> group.
+Proof.
+  move=> H.
+  exact (make_group
+    (sig (subgroup_carrier G H))
+    (subgroup_inhab G H)
+    (subgroup_mul G H)
+    (subgroup_mul_assoc G H)
+    (subgroup_group_eq_l G H)
+    (subgroup_group_eq_r G H)
+  ).
+Defined.
