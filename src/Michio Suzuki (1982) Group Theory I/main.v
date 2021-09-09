@@ -291,11 +291,8 @@ Proof.
 Qed.
 
 Definition subgroup_incl (G : group) (H : subgroup G) :
-  (sig (subgroup_carrier G H)) -> G.
-Proof.
-  move=> [a Ha].
-  exact a.
-Defined.
+  (sig (subgroup_carrier G H)) -> G
+  := fun p => let 'exist x Hx := p in x.
 
 Theorem subgroup_incl_is_injective (G : group) (H : subgroup G) :
   Injective (subgroup_incl G H).
@@ -310,12 +307,11 @@ Proof.
 Qed.
 
 Definition subgroup_mul (G : group) (H : subgroup G) :
-  (sig (subgroup_carrier G H)) -> (sig (subgroup_carrier G H)) -> (sig (subgroup_carrier G H)).
-Proof.
-  move=> [a Ha] [b Hb].
-  exists (group_mul G a b).
-  exact (subgroup_mul_mem G H a b Ha Hb).
-Defined.
+  (sig (subgroup_carrier G H)) -> (sig (subgroup_carrier G H)) -> (sig (subgroup_carrier G H))
+  := fun p q =>
+    let 'exist a Ha := p in
+    let 'exist b Hb := q in
+      (exist (subgroup_carrier G H) (group_mul G a b) (subgroup_mul_mem G H a b Ha Hb)).
 
 Theorem subgroup_mul_assoc (G : group) (H : subgroup G) :
   forall a b c : (sig (subgroup_carrier G H)),
