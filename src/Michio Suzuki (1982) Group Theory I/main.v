@@ -68,10 +68,8 @@ Proof.
     by [].
 Qed.
 
-Definition group_one (G : group) : group_carrier G.
-  destruct (constructive_definite_description (is_group_one G) (group_one_exists_unique G)) as [group_one H].
-  exact group_one.
-Defined.
+Definition group_one (G : group) : group_carrier G
+  := let 'exist one Hone := (constructive_definite_description (is_group_one G) (group_one_exists_unique G)) in one.
 
 Theorem group_one_is_group_one (G : group) : is_group_one G (group_one G).
 Proof.
@@ -116,11 +114,8 @@ Proof.
     by [].
 Qed.
 
-Definition group_inv (G : group) : group_carrier G -> group_carrier G.
-  move=> a.
-  destruct (constructive_definite_description (are_mut_inv G a) (group_inv_ex_uni G a)) as [a' H].
-  exact a'.
-Defined.
+Definition group_inv (G : group) : group_carrier G -> group_carrier G
+  := fun a => let 'exist a' Ha' := (constructive_definite_description (are_mut_inv G a) (group_inv_ex_uni G a)) in a'.
 
 Theorem group_inv_is_group_inv (G : group) (a : group_carrier G) : are_mut_inv G a (group_inv G a).
 Proof.
