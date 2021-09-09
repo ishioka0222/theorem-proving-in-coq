@@ -4,6 +4,8 @@ From mathcomp
 Require Import Coq.Logic.Description.
 Require Import Coq.Logic.FinFun.
 Require Import Coq.Logic.Classical_Prop.
+Require Import Coq.Logic.FunctionalExtensionality.
+Require Import Coq.Program.Basics.
 
 (* Definition 1.1. *)
 Structure group : Type := make_group
@@ -211,6 +213,35 @@ Definition group'_to_group : group' -> group
     (group'_to_group_sub_r G')
     (group'_to_group_sub_l G')
   ).
+
+Theorem group_to_group'_to_group_is_id :
+  compose group'_to_group group_to_group' = id.
+Proof.
+  apply functional_extensionality.
+  move=> G.
+  destruct G.
+  unfold id.
+  unfold compose.
+  unfold group_to_group'.
+  unfold group'_to_group.
+  simpl.
+  f_equal; apply proof_irrelevance.
+Qed.
+
+Theorem group'_to_group_to_group'_is_id :
+  compose group_to_group' group'_to_group = id.
+Proof.
+  apply functional_extensionality.
+  move=> G'.
+  destruct G'.
+  unfold id.
+  unfold compose.
+  unfold group_to_group'.
+  unfold group'_to_group.
+  simpl.
+  f_equal.
+  (* TODO *)
+Admitted.
 
 (* Theorem 1.4.1 *)
 Theorem inv_inv (G : group) :
