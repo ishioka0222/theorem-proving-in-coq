@@ -517,3 +517,47 @@ Proof.
   simpl.
   reflexivity.
 Qed.
+
+(* (2.3).1 *)
+Definition maximum_subgroup_carrier (G : group) : subset (group_carrier G)
+  := fun x => True.
+
+Theorem maximum_subgroup_inhab (G : group) :
+  inhabited (sig (maximum_subgroup_carrier G)).
+Proof.
+  destruct (group_inhab G) as [x].
+  
+  assert (maximum_subgroup_carrier G x) as Hyp.
+  + unfold maximum_subgroup_carrier.
+    exact.
+  exact (inhabits (exist (maximum_subgroup_carrier G) x Hyp)).
+Qed.
+
+Theorem maximum_subgroup_mul_mem (G : group) :
+  forall a b : group_carrier G,
+  maximum_subgroup_carrier G a ->
+  maximum_subgroup_carrier G b ->
+  maximum_subgroup_carrier G (group_mul G a b).
+Proof.
+  move=> a b Ha Hb.
+  unfold maximum_subgroup_carrier.
+  exact I.
+Qed.
+
+Theorem maximum_subgroup_inv_mem (G : group) :
+  forall a : group_carrier G,
+  maximum_subgroup_carrier G a ->
+  maximum_subgroup_carrier G (group_inv G a).
+Proof.
+  move=> a Ha.
+  unfold maximum_subgroup_carrier.
+  exact I.
+Qed.
+
+Definition maximum_subgroup (G : group) : subgroup G
+  := (make_subgroup G 
+    (maximum_subgroup_carrier G)
+    (maximum_subgroup_inhab G)
+    (maximum_subgroup_mul_mem G)
+    (maximum_subgroup_inv_mem G)
+  ).
