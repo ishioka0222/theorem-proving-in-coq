@@ -174,6 +174,17 @@ Proof.
   exact (proj1 ((group_inv_is_group_inv G) a)).
 Qed.
 
+Theorem group_one_inv (G : group) :
+  group_inv G (group_one G) = group_one G.
+Proof.
+  pose proof (group_inv_ex_uni G (group_one G)) as Hex_uni.
+  rewrite <- unique_existence in Hex_uni.
+  destruct Hex_uni as [Hex Huni].
+  apply (Huni (group_inv G (group_one G)) (group_one G)).
+  + exact (group_inv_is_group_inv G (group_one G)).
+  + split; rewrite group_one_mul; reflexivity.
+Qed.
+
 (* Theorem 1.2.(iii).1 *)
 Theorem group_r_trans_ex_uni (G : group) :
   forall a b x : group_carrier G, group_mul G a x = b -> x = group_mul G (group_inv G a) b.
@@ -560,4 +571,61 @@ Definition maximum_subgroup (G : group) : subgroup G
     (maximum_subgroup_inhab G)
     (maximum_subgroup_mul_mem G)
     (maximum_subgroup_inv_mem G)
+  ).
+
+(* (2.3).2 *)
+Definition minimum_subgroup_carrier (G : group) : subset (group_carrier G)
+  := fun x => x = group_one G.
+
+Theorem minimum_subgroup_carrier_sub0 (G : group) :
+  forall x : group_carrier G,
+  minimum_subgroup_carrier G x
+  -> x = group_one G.
+Proof.
+  move=> x Hx.
+  unfold minimum_subgroup_carrier in Hx.
+  exact Hx.
+Qed.
+
+Theorem minimum_subgroup_inhab (G : group) :
+  inhabited (sig (minimum_subgroup_carrier G)).
+Proof.
+  set (one := group_one G).
+  assert (minimum_subgroup_carrier G one) as Hyp.
+  + unfold minimum_subgroup_carrier.
+    unfold one.
+    reflexivity.
+  exact (inhabits (exist (minimum_subgroup_carrier G) one Hyp)).
+Qed.
+
+Theorem minimum_subgroup_mul_mem (G : group) :
+  forall a b : group_carrier G,
+  minimum_subgroup_carrier G a ->
+  minimum_subgroup_carrier G b ->
+  minimum_subgroup_carrier G (group_mul G a b).
+Proof.
+  unfold minimum_subgroup_carrier.
+  move=> a b Ha Hb.
+  rewrite Ha Hb.
+  rewrite group_mul_one.
+  reflexivity.
+Qed.
+
+Theorem minimum_subgroup_inv_mem (G : group) :
+  forall a : group_carrier G,
+  minimum_subgroup_carrier G a ->
+  minimum_subgroup_carrier G (group_inv G a).
+Proof.
+  unfold minimum_subgroup_carrier.
+  move=> a Ha.
+  rewrite Ha.
+  exact (group_one_inv G).
+Qed.
+
+Definition minimum_subgroup (G : group) : subgroup G
+  := (make_subgroup G 
+    (minimum_subgroup_carrier G)
+    (minimum_subgroup_inhab G)
+    (minimum_subgroup_mul_mem G)
+    (minimum_subgroup_inv_mem G)
   ).
