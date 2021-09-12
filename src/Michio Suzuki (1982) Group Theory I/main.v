@@ -439,6 +439,7 @@ Proof.
   reflexivity.
 Qed.
 
+
 (* 2.2.(b) *)
 Definition subgroup_to_group (G : group) :
   (subgroup G) -> group
@@ -450,3 +451,33 @@ Definition subgroup_to_group (G : group) :
     (subgroup_group_r_trans G H)
     (subgroup_group_l_trans G H)
   ).
+
+(* 2.2.(c) *)
+Theorem subgroup_one_is_group_one (G : group) (H : subgroup G) :
+  subgroup_incl G H (group_one (subgroup_to_group G H)) = group_one G.
+Proof.
+  pose proof (group_one_exists_unique (subgroup_to_group G H)) as Hone_ex_uni.
+  rewrite <- unique_existence in Hone_ex_uni.
+  destruct Hone_ex_uni as [Hone_ex Hone_uni].
+
+  set (one0 := group_one (subgroup_to_group G H)).
+  set (one1 := (exist (subgroup_carrier G H) (group_one G) (subgroup_one_mem G H))).
+  assert (one0 = one1) as Hyp0.
+  + assert (is_group_one (subgroup_to_group G H) one1) as His_one.
+    + move=> x.
+      destruct x as [x Hx].
+      split.
+      + apply subgroup_incl_is_injective.
+        simpl.
+        rewrite (group_mul_one G).
+        reflexivity.
+      + apply subgroup_incl_is_injective.
+        simpl.
+        rewrite (group_one_mul G).
+        reflexivity.
+    + exact (Hone_uni one0 one1 (group_one_is_group_one (subgroup_to_group G H)) His_one).
+
+  rewrite Hyp0.
+  simpl.
+  reflexivity.
+Qed.
