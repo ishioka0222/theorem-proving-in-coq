@@ -452,7 +452,7 @@ Definition subgroup_to_group (G : group) :
     (subgroup_group_l_trans G H)
   ).
 
-(* 2.2.(c) *)
+(* 2.2.(c).1 *)
 Theorem subgroup_one_is_group_one (G : group) (H : subgroup G) :
   subgroup_incl G H (group_one (subgroup_to_group G H)) = group_one G.
 Proof.
@@ -476,6 +476,42 @@ Proof.
         rewrite (group_one_mul G).
         reflexivity.
     + exact (Hone_uni one0 one1 (group_one_is_group_one (subgroup_to_group G H)) His_one).
+
+  rewrite Hyp0.
+  simpl.
+  reflexivity.
+Qed.
+
+(* 2.2.(c).2 *)
+Theorem subgroup_inv_is_group_inv (G : group) (H : subgroup G) :
+  compose (subgroup_incl G H) (group_inv (subgroup_to_group G H))
+  = compose (group_inv G) (subgroup_incl G H).
+Proof.
+  apply functional_extensionality.
+  move=> [x Hx].
+  unfold compose.
+  simpl.
+  
+  pose proof (group_inv_ex_uni (subgroup_to_group G H) (exist (subgroup_carrier G H) x Hx)) as Hinv_ex_uni.
+  rewrite <- unique_existence in Hinv_ex_uni.
+  destruct Hinv_ex_uni as [Hinv_ex Hinv_uni].
+  
+  set (inv0 := group_inv (subgroup_to_group G H) (exist (subgroup_carrier G H) x Hx)).
+  set (inv1 := (exist (subgroup_carrier G H) (group_inv G (subgroup_incl G H (exist (subgroup_carrier G H) x Hx))) (subgroup_inv_mem G H x Hx))).
+  assert (inv0 = inv1) as Hyp0.
+  + assert (are_mut_inv (subgroup_to_group G H) (exist (subgroup_carrier G H) x Hx) inv1) as His_inv.
+    + split.
+      + apply subgroup_incl_is_injective.
+        simpl.
+        rewrite (group_mul_inv G).
+        rewrite (subgroup_one_is_group_one G H).
+        reflexivity.
+      + apply subgroup_incl_is_injective.
+        simpl.
+        rewrite (group_inv_mul G).
+        rewrite (subgroup_one_is_group_one G H).
+        reflexivity.
+    + exact (Hinv_uni inv0 inv1 (group_inv_is_group_inv (subgroup_to_group G H) (exist (subgroup_carrier G H) x Hx)) His_inv).
 
   rewrite Hyp0.
   simpl.
