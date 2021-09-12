@@ -347,7 +347,7 @@ Structure subgroup (G : group) : Type := make_subgroup
   subgroup_inv_mem : forall a : group_carrier G, subgroup_carrier a -> subgroup_carrier (group_inv G a);
 }.
 
-(* 2.2.(a) *)
+(* (2.2).(a) *)
 Theorem subgroup_one_mem (G : group) (H : subgroup G) :
   subgroup_carrier G H (group_one G).
 Proof.
@@ -440,7 +440,7 @@ Proof.
 Qed.
 
 
-(* 2.2.(b) *)
+(* (2.2).(b) *)
 Definition subgroup_to_group (G : group) :
   (subgroup G) -> group
   := fun H => (make_group
@@ -452,7 +452,7 @@ Definition subgroup_to_group (G : group) :
     (subgroup_group_l_trans G H)
   ).
 
-(* 2.2.(c).1 *)
+(* (2.2).(c).1 *)
 Theorem subgroup_one_is_group_one (G : group) (H : subgroup G) :
   subgroup_incl G H (group_one (subgroup_to_group G H)) = group_one G.
 Proof.
@@ -482,7 +482,7 @@ Proof.
   reflexivity.
 Qed.
 
-(* 2.2.(c).2 *)
+(* (2.2).(c).2 *)
 Theorem subgroup_inv_is_group_inv (G : group) (H : subgroup G) :
   compose (subgroup_incl G H) (group_inv (subgroup_to_group G H))
   = compose (group_inv G) (subgroup_incl G H).
