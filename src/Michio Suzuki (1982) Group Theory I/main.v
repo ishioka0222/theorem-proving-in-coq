@@ -440,7 +440,7 @@ Proof.
 Qed.
 
 (* 2.2.(b) *)
-Definition subgroup_is_group (G : group) :
+Definition subgroup_to_group (G : group) :
   (subgroup G) -> group
   := fun H => (make_group
     (sig (subgroup_carrier G H))
