@@ -142,6 +142,38 @@ Proof.
   exact Ha''.
 Qed.
 
+Theorem group_one_mul (G : group) :
+  forall a : group_carrier G,
+  group_mul G (group_one G) a = a.
+Proof.
+  move=> a.
+  exact (proj2 ((group_one_is_group_one G) a)).
+Qed.
+
+Theorem group_mul_one (G : group) :
+  forall a : group_carrier G,
+  group_mul G a (group_one G) = a.
+Proof.
+  move=> a.
+  exact (proj1 ((group_one_is_group_one G) a)).
+Qed.
+
+Theorem group_inv_mul (G : group) :
+  forall a : group_carrier G,
+  group_mul G (group_inv G a) a = group_one G.
+Proof.
+  move=> a.
+  exact (proj2 ((group_inv_is_group_inv G) a)).
+Qed.
+
+Theorem group_mul_inv (G : group) :
+  forall a : group_carrier G,
+  group_mul G a (group_inv G a) = group_one G.
+Proof.
+  move=> a.
+  exact (proj1 ((group_inv_is_group_inv G) a)).
+Qed.
+
 (* Theorem 1.2.(iii).1 *)
 Theorem group_r_trans_ex_uni (G : group) :
   forall a b x : group_carrier G, group_mul G a x = b -> x = group_mul G (group_inv G a) b.
@@ -368,23 +400,49 @@ Theorem subgroup_group_r_trans (G : group) (H : subgroup G) :
   exists x : (sig (subgroup_carrier G H)),
   subgroup_mul G H a x = b.
 Proof.
-  (* TODO *)
-Admitted.
+  move=> [a Ha] [b Hb].
+
+  set (c := group_mul G (group_inv G a) b).
+  set (Hc := subgroup_mul_mem G H (group_inv G a) b (subgroup_inv_mem G H a Ha) Hb).
+
+  exists (exist (subgroup_carrier G H) c Hc).
+
+  apply (subgroup_incl_is_injective G H).
+  unfold subgroup_mul.
+  unfold subgroup_incl.
+  unfold c.
+  rewrite -(group_mul_assoc G).
+  rewrite (group_mul_inv G).
+  rewrite (group_one_mul G).
+  reflexivity.
+Qed.
 
 Theorem subgroup_group_l_trans (G : group) (H : subgroup G) :
   forall a b : (sig (subgroup_carrier G H)),
   exists y : (sig (subgroup_carrier G H)),
   subgroup_mul G H y a = b.
 Proof.
-  (* TODO *)
-Admitted.
+  move=> [a Ha] [b Hb].
+
+  set (c := group_mul G b (group_inv G a)).
+  set (Hc := subgroup_mul_mem G H b (group_inv G a) Hb (subgroup_inv_mem G H a Ha)).
+
+  exists (exist (subgroup_carrier G H) c Hc).
+
+  apply (subgroup_incl_is_injective G H).
+  unfold subgroup_mul.
+  unfold subgroup_incl.
+  unfold c.
+  rewrite (group_mul_assoc G).
+  rewrite (group_inv_mul G).
+  rewrite (group_mul_one G).
+  reflexivity.
+Qed.
 
 (* 2.2.(b) *)
-Theorem subgroup_is_group (G : group) :
-  (subgroup G) -> group.
-Proof.
-  move=> H.
-  exact (make_group
+Definition subgroup_is_group (G : group) :
+  (subgroup G) -> group
+  := fun H => (make_group
     (sig (subgroup_carrier G H))
     (subgroup_inhab G H)
     (subgroup_mul G H)
@@ -392,4 +450,3 @@ Proof.
     (subgroup_group_r_trans G H)
     (subgroup_group_l_trans G H)
   ).
-Defined.
