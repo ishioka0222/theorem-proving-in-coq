@@ -14,8 +14,8 @@ Structure group : Type := make_group
   group_inhab : inhabited group_carrier;
   group_mul : group_carrier -> group_carrier -> group_carrier;
   group_mul_assoc : forall a b c : group_carrier, group_mul (group_mul a b) c = group_mul a (group_mul b c);
-  group_eq_l : forall a b : group_carrier, exists x : group_carrier, group_mul a x = b;
-  group_eq_r : forall a b : group_carrier, exists y : group_carrier, group_mul y a = b;
+  group_r_trans : forall a b : group_carrier, exists x : group_carrier, group_mul a x = b;
+  group_l_trans : forall a b : group_carrier, exists y : group_carrier, group_mul y a = b;
 }.
 
 (* Definition 1.3. *)
@@ -27,14 +27,14 @@ Theorem group_one_exists_unique (G : group) :
   exists! group_one : group_carrier G, is_group_one G group_one.
 Proof.
   destruct (group_inhab G) as [a].
-  destruct (group_eq_l G a a) as [e Hae_eq_a].
-  destruct (group_eq_r G a a) as [e' He'a_eq_a].
+  destruct (group_r_trans G a a) as [e Hae_eq_a].
+  destruct (group_l_trans G a a) as [e' He'a_eq_a].
   exists e.
 
   assert (forall g : group_carrier G, group_mul G g e = g) as He_oner.
   + move=> g.
-    destruct (group_eq_l G a g) as [u Hau_eq_g].
-    destruct (group_eq_r G a g) as [v Hva_eq_g].
+    destruct (group_r_trans G a g) as [u Hau_eq_g].
+    destruct (group_l_trans G a g) as [v Hva_eq_g].
     rewrite -Hva_eq_g.
     rewrite group_mul_assoc.
     rewrite Hae_eq_a.
@@ -42,8 +42,8 @@ Proof.
 
   assert (forall g : group_carrier G, group_mul G e' g = g) as He'_onel.
   + move=> g.
-    destruct (group_eq_l G a g) as [u Hau_eq_g].
-    destruct (group_eq_r G a g) as [v Hva_eq_g].
+    destruct (group_r_trans G a g) as [u Hau_eq_g].
+    destruct (group_l_trans G a g) as [v Hva_eq_g].
     rewrite -Hau_eq_g.
     rewrite -group_mul_assoc.
     rewrite He'a_eq_a.
@@ -87,8 +87,8 @@ Definition are_mut_inv (G : group) (a a' : group_carrier G) :=
 Theorem group_inv_ex_uni (G : group) (a : group_carrier G) :
   exists! a' : group_carrier G, are_mut_inv G a a'.
 Proof.
-  destruct (group_eq_l G a (group_one G)) as [a' Haa'_eq_one].
-  destruct (group_eq_r G a (group_one G)) as [a'' Ha''a_eq_one].
+  destruct (group_r_trans G a (group_one G)) as [a' Haa'_eq_one].
+  destruct (group_l_trans G a (group_one G)) as [a'' Ha''a_eq_one].
 
   assert (a' = a'') as Ha'_eq_a''.
   + rewrite -(proj1 ((group_one_is_group_one G) a'')).
@@ -127,7 +127,7 @@ Proof.
 Qed.
 
 (* Theorem 1.2.(iii).1 *)
-Theorem group_eq_l_ex_uni (G : group) :
+Theorem group_r_trans_ex_uni (G : group) :
   forall a b x : group_carrier G, group_mul G a x = b -> x = group_mul G (group_inv G a) b.
 Proof.
   move=> a b x Hax_eq_b.
@@ -139,7 +139,7 @@ Proof.
 Qed.
 
 (* Theorem 1.2.(iii).2 *)
-Theorem group_eq_r_ex_uni (G : group) :
+Theorem group_l_trans_ex_uni (G : group) :
   forall a b y : group_carrier G, group_mul G y a = b -> y = group_mul G b (group_inv G a).
 Proof.
   move=> a b y Hya_eq_b.
@@ -305,7 +305,7 @@ Theorem subgroup_one_mem (G : group) (H : subgroup G) :
 Proof.
   destruct (subgroup_inhab G H) as [Hinhab].
   destruct Hinhab as [a Ha_in_H].
-  
+
   pose proof (subgroup_inv_mem G H a Ha_in_H) as Hainv_in_H.
   pose proof (subgroup_mul_mem G H a (group_inv G a) Ha_in_H Hainv_in_H) as Hmul_in_H.
   rewrite (proj1 (group_inv_is_group_inv G a)) in Hmul_in_H.
@@ -343,7 +343,7 @@ Proof.
   (* TODO *)
 Admitted.
 
-Theorem subgroup_group_eq_l (G : group) (H : subgroup G) :
+Theorem subgroup_group_r_trans (G : group) (H : subgroup G) :
   forall a b : (sig (subgroup_carrier G H)),
   exists x : (sig (subgroup_carrier G H)),
   subgroup_mul G H a x = b.
@@ -351,7 +351,7 @@ Proof.
   (* TODO *)
 Admitted.
 
-Theorem subgroup_group_eq_r (G : group) (H : subgroup G) :
+Theorem subgroup_group_l_trans (G : group) (H : subgroup G) :
   forall a b : (sig (subgroup_carrier G H)),
   exists y : (sig (subgroup_carrier G H)),
   subgroup_mul G H y a = b.
@@ -369,7 +369,7 @@ Proof.
     (subgroup_inhab G H)
     (subgroup_mul G H)
     (subgroup_mul_assoc G H)
-    (subgroup_group_eq_l G H)
-    (subgroup_group_eq_r G H)
+    (subgroup_group_r_trans G H)
+    (subgroup_group_l_trans G H)
   ).
 Defined.
