@@ -19,8 +19,8 @@ Theorem group_eq (G0 G1 : group) :
   -> G0 = G1.
 Proof.
   move=> Hcarrier Hmul.
-  destruct G0 as [carrier0 inhab0 mul0 mul_assoc0 eq_l0 eq_r0].
-  destruct G1 as [carrier1 inhab1 mul1 mul_assoc1 eq_l1 eq_r1].
+  destruct G0 as [carrier0 inhab0 mul0 mul_assoc0 r_trans0 l_trans0].
+  destruct G1 as [carrier1 inhab1 mul1 mul_assoc1 r_trans1 l_trans1].
   simpl in * |- *.
   destruct Hcarrier.
   apply JMeq_eq in Hmul.
