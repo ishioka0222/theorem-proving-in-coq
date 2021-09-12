@@ -356,8 +356,12 @@ Theorem subgroup_mul_assoc (G : group) (H : subgroup G) :
     subgroup_mul G H (subgroup_mul G H a b) c =
       subgroup_mul G H a (subgroup_mul G H b c).
 Proof.
-  (* TODO *)
-Admitted.
+  move=> [a Ha] [b Hb] [c Hc].
+  apply (subgroup_incl_is_injective G H).
+  unfold subgroup_mul.
+  unfold subgroup_incl.
+  exact (group_mul_assoc G a b c).
+Qed.
 
 Theorem subgroup_group_r_trans (G : group) (H : subgroup G) :
   forall a b : (sig (subgroup_carrier G H)),
