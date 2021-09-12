@@ -5,6 +5,7 @@ Require Import Coq.Logic.Description.
 Require Import Coq.Logic.FinFun.
 Require Import Coq.Logic.Classical_Prop.
 Require Import Coq.Logic.FunctionalExtensionality.
+Require Import Coq.Logic.JMeq.
 Require Import Coq.Program.Basics.
 
 (* Definition 1.1. *)
@@ -17,6 +18,21 @@ Structure group : Type := make_group
   group_r_trans : forall a b : group_carrier, exists x : group_carrier, group_mul a x = b;
   group_l_trans : forall a b : group_carrier, exists y : group_carrier, group_mul y a = b;
 }.
+
+Theorem group_eq (G0 G1 : group) :
+  group_carrier G0 = group_carrier G1
+  -> JMeq (group_mul G0) (group_mul G1)
+  -> G0 = G1.
+Proof.
+  move=> Hcarrier Hmul.
+  destruct G0 as [carrier0 inhab0 mul0 mul_assoc0 eq_l0 eq_r0].
+  destruct G1 as [carrier1 inhab1 mul1 mul_assoc1 eq_l1 eq_r1].
+  simpl in * |- *.
+  destruct Hcarrier.
+  apply JMeq_eq in Hmul.
+  destruct Hmul.
+  f_equal; apply proof_irrelevance.
+Qed.
 
 (* Definition 1.3. *)
 Definition is_group_one (G : group) (e : group_carrier G) :=
