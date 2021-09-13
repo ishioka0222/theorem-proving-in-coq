@@ -662,3 +662,10 @@ Definition minimum_subgroup (G : group) : subgroup G
     (minimum_subgroup_mul_mem G)
     (minimum_subgroup_inv_mem G)
   ).
+
+Definition is_proper_subset (S : Set) (T : subset S) :=
+  exists s : S, ~(T s).
+
+(* Definition 2.4 *)
+Definition is_proper_subgroup (G : group) (H : subgroup G) :=
+  is_proper_subset (group_carrier G) (subgroup_carrier G H).
