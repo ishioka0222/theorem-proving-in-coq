@@ -325,10 +325,12 @@ Proof.
   unfold compose.
   unfold group_to_group'.
   unfold group'_to_group.
+  apply group'_eq.
   simpl.
-  f_equal.
-  (* TODO *)
-Admitted.
+  reflexivity.
+  simpl.
+  apply JMeq_refl.
+Qed.
 
 (* Theorem 1.4.1 *)
 Theorem inv_inv (G : group) :
