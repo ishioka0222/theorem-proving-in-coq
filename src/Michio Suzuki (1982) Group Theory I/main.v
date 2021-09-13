@@ -223,6 +223,39 @@ Structure group' : Type := make_group'
   group'_mul_inv : forall a : group'_carrier, group'_mul a (group'_inv a) = group'_one;
 }.
 
+Theorem group'_eq (G0 G1 : group') :
+  group'_carrier G0 = group'_carrier G1
+  -> JMeq (group'_mul G0) (group'_mul G1)
+  -> G0 = G1.
+Proof.
+  move => Hcarrier Hmul.
+  destruct G0 as [carrier0 one0 inv0 mul0 mul_assoc0 one_mul0 mul_one0 inv_mul0 mul_inv0].
+  destruct G1 as [carrier1 one1 inv1 mul1 mul_assoc1 one_mul1 mul_one1 inv_mul1 mul_inv1].
+  simpl in * |- *.
+  destruct Hcarrier.
+  apply JMeq_eq in Hmul.
+  destruct Hmul.
+
+  assert (one0 = one1) as Hone.
+  + rewrite -(one_mul0 one1).
+    rewrite (mul_one1 one0).
+    reflexivity.
+  destruct Hone.
+
+  assert (inv0 = inv1) as Hinv.
+  + apply functional_extensionality.
+    move=> x.
+    rewrite -(mul_one0 (inv0 x)).
+    rewrite -(mul_inv1 x).
+    rewrite -mul_assoc0.
+    rewrite (inv_mul0 x).
+    rewrite (one_mul0 (inv1 x)).
+    reflexivity.
+  destruct Hinv.
+
+  f_equal; apply proof_irrelevance.
+Qed.
+
 Definition group_to_group' : group -> group'
   := fun G => (make_group'
     (group_carrier G)
