@@ -485,7 +485,6 @@ Proof.
   reflexivity.
 Qed.
 
-
 (* (2.2).(b) *)
 Definition subgroup_to_group (G : group) :
   (subgroup G) -> group
@@ -537,11 +536,11 @@ Proof.
   move=> [x Hx].
   unfold compose.
   simpl.
-  
+
   pose proof (group_inv_ex_uni (subgroup_to_group G H) (exist (subgroup_carrier G H) x Hx)) as Hinv_ex_uni.
   rewrite <- unique_existence in Hinv_ex_uni.
   destruct Hinv_ex_uni as [Hinv_ex Hinv_uni].
-  
+
   set (inv0 := group_inv (subgroup_to_group G H) (exist (subgroup_carrier G H) x Hx)).
   set (inv1 := (exist (subgroup_carrier G H) (group_inv G (subgroup_incl G H (exist (subgroup_carrier G H) x Hx))) (subgroup_inv_mem G H x Hx))).
   assert (inv0 = inv1) as Hyp0.
@@ -572,7 +571,7 @@ Theorem maximum_subgroup_inhab (G : group) :
   inhabited (sig (maximum_subgroup_carrier G)).
 Proof.
   destruct (group_inhab G) as [x].
-  
+
   assert (maximum_subgroup_carrier G x) as Hyp.
   + unfold maximum_subgroup_carrier.
     exact.
@@ -601,7 +600,7 @@ Proof.
 Qed.
 
 Definition maximum_subgroup (G : group) : subgroup G
-  := (make_subgroup G 
+  := (make_subgroup G
     (maximum_subgroup_carrier G)
     (maximum_subgroup_inhab G)
     (maximum_subgroup_mul_mem G)
@@ -658,7 +657,7 @@ Proof.
 Qed.
 
 Definition minimum_subgroup (G : group) : subgroup G
-  := (make_subgroup G 
+  := (make_subgroup G
     (minimum_subgroup_carrier G)
     (minimum_subgroup_inhab G)
     (minimum_subgroup_mul_mem G)
