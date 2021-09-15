@@ -39,7 +39,7 @@ Definition is_group_one (G : group) (e : group_carrier G) :=
   forall g : group_carrier G, group_mul G g e = g /\ group_mul G e g = g.
 
 (* Theorem 1.2.(ii)' *)
-Theorem group_one_exists_unique (G : group) :
+Theorem group_one_ex_uni (G : group) :
   exists! group_one : group_carrier G, is_group_one G group_one.
 Proof.
   destruct (group_inhab G) as [a].
@@ -85,13 +85,13 @@ Proof.
 Qed.
 
 Definition group_one (G : group) : group_carrier G
-  := let 'exist one Hone := (constructive_definite_description (is_group_one G) (group_one_exists_unique G)) in one.
+  := let 'exist one Hone := (constructive_definite_description (is_group_one G) (group_one_ex_uni G)) in one.
 
 Theorem group_one_is_group_one (G : group) : is_group_one G (group_one G).
 Proof.
   remember (group_one G) as e eqn: H.
   unfold group_one in H.
-  destruct (constructive_definite_description (is_group_one G) (group_one_exists_unique G)) as [e' He'] in H.
+  destruct (constructive_definite_description (is_group_one G) (group_one_ex_uni G)) as [e' He'] in H.
   rewrite H.
   exact He'.
 Qed.
@@ -501,7 +501,7 @@ Definition subgroup_to_group (G : group) :
 Theorem subgroup_one_is_group_one (G : group) (H : subgroup G) :
   subgroup_incl G H (group_one (subgroup_to_group G H)) = group_one G.
 Proof.
-  pose proof (group_one_exists_unique (subgroup_to_group G H)) as Hone_ex_uni.
+  pose proof (group_one_ex_uni (subgroup_to_group G H)) as Hone_ex_uni.
   rewrite <- unique_existence in Hone_ex_uni.
   destruct Hone_ex_uni as [Hone_ex Hone_uni].
 
